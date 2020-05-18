@@ -1,0 +1,341 @@
+.wrap{
+  width:100%;
+  height: 100%;
+  position: relative;
+}
+.EmployeeInformation {
+  width: 100%;
+  //background: white;
+  position: relative;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+  height: calc(100% - 200px);
+  overflow: scroll;
+  ul{
+    padding: 40px 54px 0px 30px;
+    //border-bottom: 20px solid #F2F2F2;
+  }
+  ul > li {
+    list-style: none;
+    font-size: 28px;
+    color: #666666;
+    margin-bottom: 20px;
+  }
+  .Li{
+    position: relative;
+    //font-size: 30px;
+    //color: #000000;
+    //font-weight: 600;
+  }
+  .dateTime{
+    position: absolute;
+    top:0;
+    right:0;
+    color: #84DC76;
+  }
+  .dateColor {
+    color: #FF850E;
+    margin-bottom: 0;
+  }
+  .state {
+    position: absolute;
+    top: 50px;
+    right: 30px;
+    color: #F44336;
+    font-size: 28px;
+  }
+}
+.wrap, .wrap1 {
+  background-color: #F6F6F6;
+  padding: 20px 30px;
+  height: 100%;
+  overflow: auto;
+  .wrap-container{
+    //height: 100%;
+    //overflow: scroll;
+    background-color: #fff;
+    margin-bottom: 20px;
+    padding: 28px 24px 28px 70px;
+    border-radius: 10px;
+    position: relative;
+    .img{
+      width: 30px;
+      position: absolute;
+      left: 24px;
+      top: 32px;
+      &.img2{
+        width: 26px;
+      }
+      &.img5{
+        width: 38px;
+        left: 18px;
+        top: 36px;
+      }
+    }
+    .tittle{
+      color: #143954;
+      font-size: 28px;
+      padding-bottom: 14px;
+      font-weight: bold;
+      &.tittle-flex{
+        display: flex;
+        justify-content: space-between;
+        .img-add{
+          width: 30px;
+          height: 30px;
+        }
+      }
+    }
+    .p-item{
+      font-size: 28px;
+      color: #666;
+      margin-bottom: 20px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      position: relative;
+      .signMark {
+        position: absolute;
+        left: -20px;
+        top: 6px;
+        color: red;
+      }
+
+      .blockk{
+        color: #999;
+        display: inline-block;
+        width: 200px;
+        &.blockk-time{
+          width: 162px;
+        }
+        &.blockk-staff{
+          width: 260px;
+        }
+        &.blockk-date{
+          width: 200px;
+        }
+
+      }
+      .right_img_src{
+        width: 20px;
+        position: absolute;
+        right: 0;
+      }
+      .span_tipp{
+        color: #999 !important;
+      }
+      .uploadFile{
+        img{
+          width:20px;
+          height:30px;
+          vertical-align: text-bottom;
+        }
+        span{
+          font-size: 26px;
+          color: lightgray;
+        }
+        input{
+          width:60px;
+          opacity: 0;
+        }
+        .Image{
+          position: absolute;
+          top:0;
+          left:0;
+          width:45px;
+          height:50px;
+        }
+      }
+      .Image{
+        position: absolute;
+        right: 10px;
+        width: 16px;
+        //height:38px;
+      }
+      .checkBox{
+        display: inline-block;
+        width:40px;
+        height:40px;
+        border:1px solid #999999;
+        margin: auto;
+        .image{
+          width:100%;
+          height:100%;
+        }
+      }
+      .img_right{
+        width: 24px;
+        position: absolute;
+        right: 0;
+      }
+      .span-rdo{
+        font-size: 28px!important;
+        color: #666;
+      }
+      input{
+        color: #666;
+      }
+      /deep/input:disabled {
+        background-color: #fff !important;
+      }
+      .roadList{
+        span{
+          border:1px solid #999;
+          padding: 10px 10px;
+        }
+        .vehicle{
+          border:1px solid rgb(51, 153, 255);
+          color: rgb(51, 153, 255);
+        }
+      }
+    }
+    .span-are{
+      border:0;
+      background-color: #f7f7f7;
+      color: #666;
+      outline:none;/*去除蓝色边框*/
+      width: 100%;
+      height: 160px;
+      font-size: 28px;
+      padding: 6px;
+    }
+    .job-arr{
+      li{
+        margin-bottom: 10px;
+        .p-item{
+          color: #666;
+          input{
+            color: #666;
+          }
+          .blockk{
+            color: #999;
+          }
+        }
+      }
+    }
+    .mu-input{
+      margin-bottom: 0;
+    }
+    .job-name{
+      border: none;
+      outline: none;
+    }
+  }
+  .wrap-change{
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    .wrap-tittle{
+      padding-left: 70px !important;
+    }
+    .wrapChild{
+      padding-left: 70px;
+      padding-right: 24px;
+      border-bottom: 10px solid #f6f6f6;
+      margin-bottom: 20px;
+    }
+  }
+  .wrap-change .wrapChild:last-child{
+    border:0;
+  }
+}
+.four_letter{
+  display: inline-block !important;
+  width: 150px !important;
+  color: #666 !important;
+}
+.six_letter{
+  display: inline-block !important;
+  width: 200px !important;
+  color: #666 !important;
+}
+.submit{
+  padding: 40px 52px;
+  button{
+    font-size: 32px;
+    border-radius: 10px;
+    width: 100%;
+    height: 90px;
+  }
+}
+.submit1{
+  padding: 40px 52px;
+  button{
+    font-size: 32px;
+    border-radius: 10px;
+    width: 49%;
+    height: 90px;
+  }
+}
+// 上传
+.uploadNew {
+  padding: 30px 30px;
+  padding-top: 0;
+  box-sizing: border-box;
+  width: 100%;
+  background: #fff;
+  margin-bottom: 24px;
+  position: relative;
+  .point {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    color: red;
+  }
+  .alertNone {
+    margin-top: 30px;
+    text-align: center;
+  }
+  .load_one {
+    padding-left: 35px;
+    padding-top: 20px;
+    img {
+      width: 35px;
+      vertical-align: top;
+      margin-right: 20px;
+    }
+    span {
+      font-size: 28px;
+      color: #999;
+    }
+  }
+  .load_two {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    div {
+      width: 40%;
+      height: 40%;
+      position: relative;
+      .removeImage {
+        width: 50px !important;
+        position: absolute;
+        right: -50px;
+        height: 50px !important;
+        top: -30px;
+      }
+      img {
+        width: 20px;
+        height: 30px;
+        vertical-align: text-bottom;
+      }
+      span {
+        font-size: 26px;
+        color: lightgray;
+      }
+      input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+
+      }
+      .Image {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+}
