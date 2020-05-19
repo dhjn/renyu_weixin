@@ -1,6 +1,6 @@
 <template>
-  <div class="messageAll" v-loading="isloading">
-    <mu-form ref="form" :model="form" class="mu-demo-form" auto-validate>
+  <div class="messageAll">
+    <mu-form ref="form" :model="form" class="mu-demo-form" auto-validate v-loading="isloading">
       <div class="message">
         <div class="messOne">
           <span>出生地</span>
@@ -661,10 +661,10 @@ export default {
     firstwkdate(num) {
       this.typeNum = num;
       this.pickerValue = new Date()
-      if(num===3||num===4){
-        this.endDate = new Date('2050-12-31')
-      } else {
+      if(num===1){
         this.endDate = new Date()
+      } else {
+        this.endDate = new Date('2050-12-31')
       }
       this.$refs.picker.open();
     },
@@ -786,6 +786,9 @@ export default {
 }
 /deep/ .message .messOne .mu-input {
   width: 3rem;
+}
+/deep/ .mu-form{
+  position: relative;
 }
 /deep/ .mu-form-item {
   padding: 0;

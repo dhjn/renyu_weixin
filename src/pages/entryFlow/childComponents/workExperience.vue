@@ -1,7 +1,7 @@
 <!--一条为一行-->
 <template>
-  <div class="messageAll" style="z-index: 100" v-loading="isloading">
-    <mu-form ref="form" :model="form" class="mu-demo-form">
+  <div class="messageAll" style="z-index: 100">
+    <mu-form ref="form" :model="form" class="mu-demo-form" v-loading="isloading">
       <div class="message">
         <div class="messOne">
           <span>工作履历开始时间</span>
@@ -350,6 +350,9 @@ export default {
   height: 100%;
   line-height: 2;
   font-size: inherit;
+}
+/deep/ .mu-form{
+  position: relative;
 }
 /deep/ .mu-form-item {
   padding: 0;
