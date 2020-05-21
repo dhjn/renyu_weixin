@@ -93,7 +93,7 @@
 <script>
 import { filterPicture } from "@/lib/util";
 import valid from "@/lib/pub_valid";
-
+import { Toast } from 'mint-ui'
 export default {
   name: "uploadMsg",
   data() {
@@ -116,7 +116,7 @@ export default {
           id: 6135
         },
         {
-          title: "身份证复印件4份正反面在一张纸上",
+          title: "身份证复印件正反面在一张纸上",
           iconImg: require("../../../static/entryFlow/entry_18.png"),
           rename: "身份证",
           id: 6132
@@ -147,7 +147,7 @@ export default {
         }
       ],
       uploadMaskSrc: "",
-      isloading:false
+      isloading: false
     };
   },
   components: {},
@@ -175,11 +175,19 @@ export default {
           let url = window.webkitURL.createObjectURL(file[0]); // 获取本地的文件路径
           t.uploadFile(file[0], fileName, url, id);
         } else {
-          this.$alert("只能上传一份", "提示");
+          Toast({
+            message: "只能上传一份",
+            position: "middle",
+            duration: 2000
+          });
           return;
         }
       } else {
-        this.$alert("格式上传不正确", "提示");
+        Toast({
+          message: "格式上传不正确",
+          position: "middle",
+          duration: 2000
+        });
       }
     },
     uploadFile(file, fileName, url, id) {
@@ -229,9 +237,13 @@ export default {
     submitEntryFlow() {
       const t = this;
       let formData = new FormData();
-      if(this.uploadArr.length===0){
-        this.$alert("该流程已过", "提示");
-        return
+      if (this.uploadArr.length === 0) {
+        Toast({
+          message: "该流程已过",
+          position: "middle",
+          duration: 2000
+        });
+        return;
       }
       for (let key in this.uploadFileImage) {
         this.uploadArr.forEach(ele => {
@@ -246,7 +258,7 @@ export default {
       // for (var value of formData.values()) {
       //   console.log(value);
       // }
-      t.isloading = true
+      t.isloading = true;
       let headers = { "content-Type": "multipart/form-data" };
       this.http
         .post("/api/filesupload", formData, {
@@ -261,8 +273,12 @@ export default {
             };
             t.$store.commit("entryFlow/setOfferListShow", obj);
           }
-          t.isloading = false
-          this.$alert(res.data.msg, "提示");
+          t.isloading = false;
+          Toast({
+            message: res.data.msg,
+            position: "middle",
+            duration: 2000
+          });
         })
         .catch(err => {
           console.log(err);
@@ -282,6 +298,7 @@ export default {
   },
   mounted() {
     const t = this;
+    document.body.style.overflow= "scroll";
     t.getUploadParams();
   },
   created() {},
@@ -292,11 +309,18 @@ export default {
 /deep/ .material-icons {
   vertical-align: middle;
 }
+/deep/ .mu-flat-button .mu-button-wrapper {
+  font-size: 14px !important;
+}
 .upload_msg {
   width: 100%;
-  height: calc(100% - 320px);
+  // height: calc(100% - 320px);
+  position: absolute;
+  top: 18%;
+  z-index: 1000;
   overflow-y: scroll;
-  background: rgba(244, 246, 250, 1);
+  // background: rgba(244, 246, 250, 1);
+  background: white;
   .link {
     color: rgb(28, 63, 90);
     font-size: 0.4rem;
@@ -351,7 +375,7 @@ export default {
         margin-right: 10px;
       }
       span {
-        font-size: 0.3rem;
+        font-size: 0.4rem;
       }
     }
     .upload_all_con {
@@ -443,6 +467,7 @@ export default {
     margin-bottom: 0;
   }
   .sub_fotter {
+    margin-bottom: 20px;
     width: 100%;
     height: 100px;
     border-radius: 10px;

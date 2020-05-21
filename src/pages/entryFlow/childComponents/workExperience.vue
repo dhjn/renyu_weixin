@@ -266,6 +266,7 @@ export default {
           data.type = "5";
           data.userId = userId;
           t.isloading = true
+          document.body.style.overflow= "hidden";
           this.http
             .post(`/api/saveuserinfo?Token=${Token}`, JSON.stringify(data))
             .then(res => {
@@ -280,6 +281,7 @@ export default {
                   Object.assign(t.formData, t.form)
                 );
                 t.isloading = false
+                document.body.style.overflow= "scroll";
                 t.$store.commit("entryFlow/SetWorkInfo", true);
                 t.$router.push({ path: "/entryFlowOffer" });
               } else {
@@ -321,6 +323,8 @@ export default {
   },
   mounted() {
     const t = this;
+    document.body.style.overflow= "scroll";
+    window.scrollTo(0,0)
     for (let dat1 in t.formData) {
       for (let dat2 in t.form) {
         if (dat1 === dat2) {
@@ -353,6 +357,9 @@ export default {
 }
 /deep/ .mu-form{
   position: relative;
+}
+/deep/ .mu-loading-wrap{
+  position:fixed;
 }
 /deep/ .mu-form-item {
   padding: 0;
@@ -394,7 +401,13 @@ export default {
 /deep/ .mu-item .mu-item-title {
   font-size: 0.4rem;
 }
-// /deep/ .mu-form-item .mu-checkbox, .mu-form-item .mu-radio, .mu-form-item .mu-switch{
-//   margin-right: 25px;
-// }
+.message .messOne .mu-input{
+  width: auto;
+}
+.messageAll{
+  height: auto; 
+}
+/deep/ .mu-radio{
+  margin-right: 40px !important;
+}
 </style>

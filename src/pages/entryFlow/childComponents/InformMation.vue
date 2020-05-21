@@ -1,6 +1,6 @@
 <template>
   <div class="messageAll">
-    <mu-form ref="form" :model="form" class="mu-demo-form" auto-validate v-loading="isloading">
+    <mu-form ref="form" :model="form" class="mu-demo-form" auto-validate  v-loading="isloading">
       <div class="message">
         <div class="messOne">
           <span>出生地</span>
@@ -547,6 +547,7 @@ export default {
           data.type = "1";
           data.userId = userId
           t.isloading = true 
+          document.body.style.overflow= "hidden";
           this.http
             .post(`/api/saveuserinfo?Token=${Token}`, JSON.stringify(data))
             .then(res => {
@@ -561,6 +562,7 @@ export default {
                   Object.assign(t.formData, t.form)
                 );
                 t.isloading = false
+                document.body.style.overflow= "scroll";
                 t.$store.commit("entryFlow/SetUserInfo", true);
                 t.$router.push({ path: "/entryFlowOffer" });
               } else {
@@ -709,6 +711,7 @@ export default {
   },
   mounted() {
     const t = this;
+    document.body.style.overflow= "scroll";
     t.nationOptions = t.generateArr(nationData.data[0]); // 转换民族数据
     t.polstatusOptions = t.generateArr(dataArr.polstatus); // 转换政治面貌数据
     t.educationOptions = t.generateArr(dataArr.education); // 转换最高学历数据
@@ -773,6 +776,9 @@ export default {
 <style scoped type="text/less" lang="less">
 @import "../../css/scrollPicker";
 @import "./css/entry";
+.messageAll{
+  height: 110%;
+}
 .message .messOne .point {
   position: absolute;
   left: 0.266667rem;
@@ -783,6 +789,9 @@ export default {
 }
 .message .messOne {
   margin: 0.8rem 0;
+}
+/deep/ .mu-loading-wrap{
+  position:fixed;
 }
 /deep/ .message .messOne .mu-input {
   width: 3rem;
@@ -830,5 +839,8 @@ export default {
 }
 /deep/ .mu-item .mu-item-title {
   font-size: 0.4rem;
+}
+.messageAll{
+  height: auto; 
 }
 </style>

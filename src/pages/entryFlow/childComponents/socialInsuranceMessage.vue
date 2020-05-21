@@ -160,6 +160,7 @@ export default {
   },
   mounted() {
     const t = this;
+    window.scrollTo(0,0)
     for (let dat1 in t.formData) {
       for (let dat2 in t.form) {
         if (dat1 === dat2) {

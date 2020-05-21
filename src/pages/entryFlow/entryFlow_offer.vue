@@ -1,6 +1,8 @@
 <!--app-->
 <template>
-  <div style="width: 100%;height: 100%;background: white">
+  <div
+    style="width: 100%;height: 100%;background: white;display:flex;flex-direction:column;"
+  >
     <div class="entryFlow">
       <div class="entry_order">
         <ul>
@@ -48,37 +50,41 @@
           </li>
         </ul>
       </div>
-      <div v-if="entryDataBlock === '01rejectOffer'">
-        <div class="submit">
-          <div class="div1">
-            尊敬的<span>{{ formData.name }}</span>
-            <span v-if="formData.gender === '男'">先生</span>
-            <span v-if="formData.gender === '女'">女士</span>
-          </div>
-          <div class="div2">热烈祝贺你<span>通过</span>我公司面试</div>
-          <div class="div3">
-            <ul>
-              <li>
-                <span>雇员姓名 :</span> <span> {{ formData.name }}</span>
-              </li>
-              <li>
-                <span>证件号码 :</span>
-                <span> {{ formData.identity }}</span>
-              </li>
-              <li>
-                <span>手机号 :</span>
-                <span class="span1"> {{ formData.phone }}</span>
-              </li>
-              <li>
-                <span>工作省 :</span>
-                <span class="span1"> {{ formData.province }}</span>
-              </li>
-            </ul>
-          </div>
-          <div class="div4" @click="uploadFile()">
-            查看offer >>
-          </div>
+    </div>
+    <div v-if="entryDataBlock === '01rejectOffer'" style="flex:1">
+      <div class="submit">
+        <div class="div1">
+          尊敬的<span>{{ formData.name }}</span>
+          <span v-if="formData.gender === '男'">先生</span>
+          <span v-if="formData.gender === '女'">女士</span>
         </div>
+        <div class="div2">热烈祝贺你<span>通过</span>我公司面试</div>
+        <div class="div3">
+          <ul>
+            <li>
+              <span>雇员姓名 :</span> <span> {{ formData.name }}</span>
+            </li>
+            <li>
+              <span>证件号码 :</span>
+              <span> {{ formData.identity }}</span>
+            </li>
+            <li>
+              <span>手机号 :</span>
+              <span class="span1"> {{ formData.phone }}</span>
+            </li>
+            <li>
+              <span>工作省 :</span>
+              <span class="span1"> {{ formData.province }}</span>
+            </li>
+          </ul>
+        </div>
+        <div class="div4" @click="uploadFile()">
+          查看offer >>
+        </div>
+      </div>
+      <div
+        style="position: absolute;top: 11rem;width: 100%;"
+      >
         <div class="sub_msg">
           <img
             src="../../../static/entryFlow/entry_5.png"
@@ -159,7 +165,7 @@ export default {
     }
     // 工作信息
     if (data.hasOwnProperty("wstart")) {
-      if (data.wstart === '') {
+      if (data.wstart === "") {
         t.$store.commit("entryFlow/SetWorkInfo", false);
       } else {
         t.$store.commit("entryFlow/SetWorkInfo", true);
@@ -317,7 +323,7 @@ export default {
 @import "../css/common_inform";
 .entryFlow {
   width: 100%;
-  height: 20%;
+  height: 280px;
   background-image: url("../../../static/entryFlow/entry_4.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;
@@ -354,87 +360,84 @@ export default {
       }
     }
   }
-  .submit {
-    width: 90%;
-    height: 600px;
-    background: white;
-    position: absolute;
-    top: 250px;
-    left: 5%;
+}
+.sub_msg {
+  width: 100%;
+  height: 100px;
+  border-radius: 10px;
+  background: #f2fafd;
+  font-size: 26px;
+  line-height: 100px;
+  color: #718a9d;
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+  img {
+    width: 60px;
+  }
+  span {
+    font-size: 32px;
+    color: #000;
+  }
+}
+.sub_fotter {
+  width: 100%;
+  height: 100px;
+  position: absolute;
+  /*left: 10%;*/
+  border-radius: 10px;
+  display: flex;
+  padding: 0 20px;
+  justify-content: space-around;
+  button:nth-of-type(1) {
+    width: 50%;
+    outline: none;
+    background: #3399ff;
+    height: 100%;
+    border-top-style: none;
+    border-right-style: none;
+    border-bottom-style: none;
+    border-left-style: none;
+    font-size: 30px;
+    color: white;
     border-radius: 20px;
-    box-shadow: 0px 2px 2px #f6f6f6;
-    padding: 50px;
-    box-sizing: border-box;
-    .div1,
-    .div2,
-    .div3 {
-      font-size: 32px;
-      margin-bottom: 10px;
-      color: #0b3251;
-    }
-    .div2 span {
-      color: #03c088;
-    }
-    .div3 {
-      margin-top: 40px;
-      li {
-        margin-bottom: 20px;
-        span:nth-of-type(1) {
-          color: #ccc;
-        }
+  }
+}
+.submit {
+  width: 90%;
+  height: 600px;
+  background: white;
+  position: absolute;
+  top: 250px;
+  left: 5%;
+  border-radius: 20px;
+  box-shadow: 0px 2px 2px #f6f6f6;
+  padding: 50px;
+  box-sizing: border-box;
+  .div1,
+  .div2,
+  .div3 {
+    font-size: 32px;
+    margin-bottom: 10px;
+    color: #0b3251;
+  }
+  .div2 span {
+    color: #03c088;
+  }
+  .div3 {
+    margin-top: 40px;
+    li {
+      margin-bottom: 20px;
+      span:nth-of-type(1) {
+        color: #ccc;
       }
     }
-    .div4 {
-      color: #3399ff;
-      text-align: center;
-      margin-top: 60px;
-      font-size: 32px;
-    }
   }
-  .sub_msg {
-    width: 96%;
-    height: 100px;
-    position: absolute;
-    top: 880px;
-    left: 2%;
-    border-radius: 10px;
-    background: #f2fafd;
-    font-size: 26px;
-    line-height: 100px;
-    color: #718a9d;
-    display: flex;
-    align-items: center;
-    img {
-      width: 60px;
-    }
-    span {
-      font-size: 32px;
-      color: #000;
-    }
-  }
-  .sub_fotter {
-    width: 100%;
-    height: 100px;
-    position: absolute;
-    top: 1050px;
-    /*left: 10%;*/
-    border-radius: 10px;
-    display: flex;
-    padding: 0 20px;
-    justify-content: space-around;
-    button:nth-of-type(1) {
-      width: 50%;
-      outline: none;
-      background: #3399ff;
-      height: 100%;
-      border-top-style: none;
-      border-right-style: none;
-      border-bottom-style: none;
-      border-left-style: none;
-      font-size: 30px;
-      color: white;
-      border-radius: 20px;
-    }
+  .div4 {
+    color: #3399ff;
+    text-align: center;
+    margin-top: 60px;
+    font-size: 32px;
   }
 }
 </style>

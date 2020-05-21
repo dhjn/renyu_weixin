@@ -241,7 +241,9 @@ export default {
       return true;
     }
   },
-  mounted() {},
+  mounted() {
+    document.body.style.overflow= "scroll";
+  },
   computed: {
     userInfoShow() {
       return this.$store.state.entryFlow.infoMsgShow.userInfo;
@@ -265,13 +267,12 @@ export default {
 .write_msg {
   width: 100%;
   height: calc(100% - 320px);
-  display: flex;
-  flex-direction: column;
   overflow-y: scroll;
   background: rgba(244, 246, 250, 1);
   .msg_one {
     width: 100%;
     padding: 30px;
+    position:relative;
     background: white;
     font-size: 34px;
     margin-bottom: 20px;
@@ -309,19 +310,27 @@ export default {
     .msg_one_middle_two {
       margin-top: 10px;
     }
+    .work-img{
+      display: flex;
+      flex-wrap: wrap;
+      width:35px; 
+      margin-right: 20px;
+      max-height: 40px;
+    }
     .Image1 {
       margin-right: 20px;
     }
     img {
       width: 35px;
+      height: 100%;
       vertical-align: middle;
     }
   }
   .sub_fotter {
     width: 100%;
+    height: 100px;
     border-radius: 10px;
     display: flex;
-    flex: 1;
     padding: 0 20px;
     justify-content: space-around;
     background: white;
@@ -330,22 +339,20 @@ export default {
       outline: none;
       background: white;
       color: #3399ff;
-      height: 55%;
+      height: 98%;
       font-size: 30px;
       border: 2px solid #3399ff;
       border-radius: 20px;
-      margin: auto;
     }
     button:nth-of-type(2) {
       width: 40%;
       outline: none;
       background: white;
       color: #3399ff;
-      height: 55%;
+      height: 98%;
       font-size: 30px;
       border: 2px solid #3399ff;
       border-radius: 20px;
-      margin: auto;
     }
   }
 }
