@@ -22,8 +22,10 @@
             <input
               type="file"
               :ref="item.id"
+              class="file"
               @change="UpLoadFile($event, item.id)"
               accept="image/*"
+              capture="camera"
             />
             <img
               src="../../.././static/entryFlow/entry_14.png"
@@ -93,7 +95,7 @@
 <script>
 import { filterPicture } from "@/lib/util";
 import valid from "@/lib/pub_valid";
-import { Toast } from 'mint-ui'
+import { Toast } from "mint-ui";
 export default {
   name: "uploadMsg",
   data() {
@@ -294,12 +296,56 @@ export default {
           }
         });
       });
+    },
+    // 获取系统类型
+    getIos() {
+      if (!!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    // 获取手机类型
+    judgeBrand(sUserAgent) {
+      var isIphone = sUserAgent.match(/iphone/i) == "iphone";
+      var isHuawei = sUserAgent.match(/huawei/i) == "huawei";
+      var isHonor = sUserAgent.match(/honor/i) == "honor";
+      var isOppo = sUserAgent.match(/oppo/i) == "oppo";
+      var isOppoR15 = sUserAgent.match(/pacm00/i) == "pacm00";
+      var isVivo = sUserAgent.match(/vivo/i) == "vivo";
+      var isXiaomi = sUserAgent.match(/mi\s/i) == "mi ";
+      var isXiaomi2s = sUserAgent.match(/mix\s/i) == "mix ";
+      var isRedmi = sUserAgent.match(/redmi/i) == "redmi";
+      var isSamsung = sUserAgent.match(/sm-/i) == "sm-";
+      if (isIphone) {
+        return "iphone";
+      } else if (isHuawei || isHonor) {
+        return "huawei";
+      } else if (isOppo || isOppoR15) {
+        return "oppo";
+      } else if (isVivo) {
+        return "vivo";
+      } else if (isXiaomi || isRedmi || isXiaomi2s) {
+        return "xiaomi";
+      } else if (isSamsung) {
+        return "samsung";
+      } else {
+        return "default";
+      }
     }
   },
   mounted() {
     const t = this;
     document.body.style.overflow= "scroll";
     t.getUploadParams();
+    var file = document.getElementsByClassName('file')
+    var brand = this.judgeBrand(navigator.userAgent.toLowerCase()); // 获取手机类型
+    if (brand!=='huawei') {
+      let files = Array.from(file)
+      files.forEach(item=>{
+        item.removeAttribute("capture");
+      })
+    }
   },
   created() {},
   computed: {}

@@ -2,17 +2,17 @@
 <template>
   <div class="write_msg">
     <div class="msg_one">
-      <div class="msg_one_top">
-        <div class="msg_one_title">
-          <img
-            class="Image1"
-            src="../../../static/entryFlow/个人信息.png"
-            alt=""
-          />
-          <span>个人信息</span>
-        </div>
-        <div>
-          <router-link to="/entryFlowOffer/InformMation" tag="div">
+      <router-link to="/entryFlowOffer/InformMation" tag="div">
+        <div class="msg_one_top">
+          <div class="msg_one_title">
+            <img
+              class="Image1"
+              src="../../../static/entryFlow/个人信息.png"
+              alt=""
+            />
+            <span>个人信息</span>
+          </div>
+          <div>
             <img
               src="../../../static/entryFlow/entry_13.png"
               alt=""
@@ -25,23 +25,23 @@
               alt=""
               v-show="userInfoShow"
             />
-          </router-link>
+          </div>
         </div>
-      </div>
+      </router-link>
     </div>
 
     <div class="msg_one">
-      <div class="msg_one_top">
-        <div class="msg_one_title">
-          <img
-            class="Image1"
-            src="../../../static/entryFlow/联系地址信息.png"
-            alt=""
-          />
-          <span>社保信息</span>
-        </div>
-        <div>
-          <router-link to="/entryFlowOffer/socialInsuranceMessage" tag="div">
+      <router-link to="/entryFlowOffer/socialInsuranceMessage" tag="div">
+        <div class="msg_one_top">
+          <div class="msg_one_title">
+            <img
+              class="Image1"
+              src="../../../static/entryFlow/联系地址信息.png"
+              alt=""
+            />
+            <span>社保信息</span>
+          </div>
+          <div>
             <img
               src="../../../static/entryFlow/entry_13.png"
               alt=""
@@ -54,23 +54,23 @@
               alt=""
               v-show="socialInsranceInfoShow"
             />
-          </router-link>
+          </div>
         </div>
-      </div>
+      </router-link>
     </div>
 
     <div class="msg_one">
-      <div class="msg_one_top">
-        <div class="msg_one_title">
-          <img
-            class="Image1"
-            src="../../../static/entryFlow/银行卡信息.png"
-            alt=""
-          />
-          <span>工资信息</span>
-        </div>
-        <div>
-          <router-link to="/entryFlowOffer/salaryMessage" tag="div">
+      <router-link to="/entryFlowOffer/salaryMessage" tag="div">
+        <div class="msg_one_top">
+          <div class="msg_one_title">
+            <img
+              class="Image1"
+              src="../../../static/entryFlow/银行卡信息.png"
+              alt=""
+            />
+            <span>工资信息</span>
+          </div>
+          <div>
             <img
               src="../../../static/entryFlow/entry_13.png"
               alt=""
@@ -83,23 +83,23 @@
               alt=""
               v-show="salaryInfoShow"
             />
-          </router-link>
+          </div>
         </div>
-      </div>
+      </router-link>
     </div>
 
     <div class="msg_one">
-      <div class="msg_one_top">
-        <div class="msg_one_title">
-          <img
-            class="Image1"
-            src="../../../static/entryFlow/entry_21.png"
-            alt=""
-          />
-          <span>最高学历</span>
-        </div>
-        <div>
-          <router-link to="/entryFlowOffer/educationMessage" tag="div">
+      <router-link to="/entryFlowOffer/educationMessage" tag="div">
+        <div class="msg_one_top">
+          <div class="msg_one_title">
+            <img
+              class="Image1"
+              src="../../../static/entryFlow/entry_21.png"
+              alt=""
+            />
+            <span>最高学历</span>
+          </div>
+          <div>
             <img
               src="../../../static/entryFlow/entry_13.png"
               alt=""
@@ -112,23 +112,24 @@
               alt=""
               v-show="eductionInfoShow"
             />
-          </router-link>
+          </div>
         </div>
-      </div>
+      </router-link>
     </div>
 
     <div class="msg_one">
-      <div class="msg_one_top">
-        <div class="msg_one_title">
-          <img
-            class="Image1"
-            src="../../../static/entryFlow/工作经历.png"
-            alt=""
-          />
-          <span>工作经历信息</span>
-        </div>
-        <div>
-          <!-- <img
+      <router-link to="/entryFlowOffer/workExperience" tag="div">
+        <div class="msg_one_top">
+          <div class="msg_one_title">
+            <img
+              class="Image1"
+              src="../../../static/entryFlow/工作经历.png"
+              alt=""
+            />
+            <span>工作经历信息</span>
+          </div>
+          <div>
+            <!-- <img
             class="Image1"
             src="../../../static/entryFlow/entry_12.png"
             alt=""
@@ -141,7 +142,6 @@
             class="Image1"
             @click="to(2)"
           /> -->
-          <router-link to="/entryFlowOffer/workExperience" tag="div">
             <img
               src="../../../static/entryFlow/entry_13.png"
               alt=""
@@ -154,9 +154,9 @@
               alt=""
               v-show="workInfoShow"
             />
-          </router-link>
+          </div>
         </div>
-      </div>
+      </router-link>
     </div>
 
     <div class="sub_fotter">
@@ -242,7 +242,7 @@ export default {
     }
   },
   mounted() {
-    document.body.style.overflow= "scroll";
+    document.body.style.overflow = "scroll";
   },
   computed: {
     userInfoShow() {
@@ -272,7 +272,7 @@ export default {
   .msg_one {
     width: 100%;
     padding: 30px;
-    position:relative;
+    position: relative;
     background: white;
     font-size: 34px;
     margin-bottom: 20px;
@@ -310,10 +310,10 @@ export default {
     .msg_one_middle_two {
       margin-top: 10px;
     }
-    .work-img{
+    .work-img {
       display: flex;
       flex-wrap: wrap;
-      width:35px; 
+      width: 35px;
       margin-right: 20px;
       max-height: 40px;
     }

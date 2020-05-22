@@ -1,6 +1,12 @@
 <template>
   <div class="messageAll">
-    <mu-form ref="form" :model="form" class="mu-demo-form" auto-validate  v-loading="isloading">
+    <mu-form
+      ref="form"
+      :model="form"
+      class="mu-demo-form"
+      auto-validate
+      v-loading="isloading"
+    >
       <div class="message">
         <div class="messOne">
           <span>出生地</span>
@@ -430,7 +436,7 @@ import scrollPicker from "@/components/scrollPicker";
 import { Toast } from "mint-ui";
 import nationData from "./js/data";
 import dataArr from "./js/data2";
-import validate from '../../../lib/pub_valid'
+import validate from "../../../lib/pub_valid";
 export default {
   name: "memberBase",
   data() {
@@ -506,7 +512,10 @@ export default {
       ],
       mpphone: [
         { validate: val => !!val, message: "紧急联系人电话不能为空" },
-        { validate: val => validate.val_phone(this.form.mpphone), message: "紧急联系人电话输入有误" },
+        {
+          validate: val => validate.val_phone(this.form.mpphone),
+          message: "紧急联系人电话输入有误"
+        }
       ],
       ifjkz: [{ validate: val => !!val, message: "健康证录入项不能为空" }],
       jkzsdate: [
@@ -530,7 +539,7 @@ export default {
       scrollType: "",
       maps: [],
       map: {},
-      isloading:false
+      isloading: false
     };
   },
   components: {
@@ -542,12 +551,12 @@ export default {
       t.$refs.form.validate().then(result => {
         if (result) {
           let Token = localStorage.getItem("token");
-          let userId = localStorage.getItem('userId')
+          let userId = localStorage.getItem("userId");
           let data = Object.assign({}, t.form);
           data.type = "1";
-          data.userId = userId
-          t.isloading = true 
-          document.body.style.overflow= "hidden";
+          data.userId = userId;
+          t.isloading = true;
+          document.body.style.overflow = "hidden";
           this.http
             .post(`/api/saveuserinfo?Token=${Token}`, JSON.stringify(data))
             .then(res => {
@@ -561,8 +570,8 @@ export default {
                   "entryFlow/setFormData",
                   Object.assign(t.formData, t.form)
                 );
-                t.isloading = false
-                document.body.style.overflow= "scroll";
+                t.isloading = false;
+                document.body.style.overflow = "scroll";
                 t.$store.commit("entryFlow/SetUserInfo", true);
                 t.$router.push({ path: "/entryFlowOffer" });
               } else {
@@ -662,11 +671,11 @@ export default {
     },
     firstwkdate(num) {
       this.typeNum = num;
-      this.pickerValue = new Date()
-      if(num===1){
-        this.endDate = new Date()
+      this.pickerValue = new Date();
+      if (num === 1) {
+        this.endDate = new Date();
       } else {
-        this.endDate = new Date('2050-12-31')
+        this.endDate = new Date("2050-12-31");
       }
       this.$refs.picker.open();
     },
@@ -776,7 +785,7 @@ export default {
 <style scoped type="text/less" lang="less">
 @import "../../css/scrollPicker";
 @import "./css/entry";
-.messageAll{
+.messageAll {
   height: 110%;
 }
 .message .messOne .point {
@@ -790,13 +799,13 @@ export default {
 .message .messOne {
   margin: 0.8rem 0;
 }
-/deep/ .mu-loading-wrap{
-  position:fixed;
+/deep/ .mu-loading-wrap {
+  position: fixed;
 }
 /deep/ .message .messOne .mu-input {
   width: 3rem;
 }
-/deep/ .mu-form{
+/deep/ .mu-form {
   position: relative;
 }
 /deep/ .mu-form-item {
@@ -840,7 +849,7 @@ export default {
 /deep/ .mu-item .mu-item-title {
   font-size: 0.4rem;
 }
-.messageAll{
-  height: auto; 
+.messageAll {
+  height: auto;
 }
 </style>
