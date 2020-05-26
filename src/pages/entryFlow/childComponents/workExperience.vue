@@ -386,6 +386,12 @@ export default {
           t.form[dat2] = t.formData['wend'];
         } else if(dat2==='workplace'){
           t.form[dat2] = t.formData['workplace'];
+        } else if(dat2==='befsalary'){
+          t.form[dat2] = t.formData['befsalary'];
+        } else if(dat2==='content'){
+          t.form[dat2] = t.formData['content'];
+        } else if(dat2==='reason'){
+          t.form[dat2] = t.formData['reason'];
         }
       }
     }
