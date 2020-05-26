@@ -35,11 +35,52 @@
       </div>
       <div class="message">
         <div class="messOne">
+          <span>月薪</span>
+          <span>
+            <mu-form-item prop="befsalary">
+              <mu-text-field
+                v-model="form.befsalary"
+                placeholder="请填写"
+                type="number"
+                @keyup.native="changeNumber"
+              ></mu-text-field>
+            </mu-form-item>
+          </span>
+        </div>
+      </div>
+      <div class="message">
+        <div class="messOne">
           <span>工作单位</span>
           <span>
             <mu-form-item prop="workplace">
               <mu-text-field
                 v-model="form.workplace"
+                placeholder="请填写"
+              ></mu-text-field>
+            </mu-form-item>
+          </span>
+        </div>
+      </div>
+      <div class="message">
+        <div class="messOne">
+          <span>工作内容及岗位</span>
+          <span>
+            <mu-form-item prop="content">
+              <mu-text-field
+                v-model="form.content"
+                placeholder="请填写"
+              ></mu-text-field>
+            </mu-form-item>
+          </span>
+        </div>
+      </div>
+      <div class="message">
+        <div class="messOne">
+          <span>离职原因</span>
+          <span>
+            <mu-form-item prop="reason">
+              <mu-text-field
+                v-model="form.reason"
                 placeholder="请填写"
               ></mu-text-field>
             </mu-form-item>
@@ -232,6 +273,9 @@ export default {
       form: {
         wstart: "",
         wend: "",
+        befsalary:'',
+        content:'',
+        reason:'',
         workplace: "",
         issick: "0",
         poc: "0",
@@ -314,6 +358,9 @@ export default {
       this.typeNum = num;
       this.pickerValue = new Date
       this.$refs.picker.open();
+    },
+    changeNumber() {
+      this.form.befsalary = this.form.befsalary.replace(/\./, "");
     },
     handleConfirm(data) {
       const t = this;

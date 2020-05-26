@@ -44,6 +44,45 @@
           </span>
         </div>
       </div>
+       <div class="message">
+        <div class="messOne">
+          <span>所学专业</span>
+          <span>
+            <mu-form-item prop="major">
+              <mu-text-field
+                placeholder="请填写"
+                v-model="form.major"
+              ></mu-text-field>
+            </mu-form-item>
+          </span>
+        </div>
+      </div>
+      <div class="message">
+        <div class="messOne">
+          <span>证明人</span>
+          <span>
+            <mu-form-item prop="prove">
+              <mu-text-field
+                placeholder="请填写"
+                v-model="form.prove"
+              ></mu-text-field>
+            </mu-form-item>
+          </span>
+        </div>
+      </div>
+      <div class="message">
+        <div class="messOne">
+          <span>证明人联系方式</span>
+          <span>
+            <mu-form-item prop="proPhone" :rules="proPhone">
+              <mu-text-field
+                placeholder="请填写"
+                v-model="form.proPhone"
+              ></mu-text-field>
+            </mu-form-item>
+          </span>
+        </div>
+      </div>
       <div class="message">
         <div class="messOne">
           <span>毕业院校开始时间</span>
@@ -135,6 +174,9 @@ export default {
         name: "",
         identity: "",
         education: "",
+        major:'',
+        prove:'',
+        proPhone:'',
         gstart: "",
         gend: "",
         graduation: ""
@@ -152,6 +194,12 @@ export default {
         }
       ],
       education: [{ validate: val => !!val, message: "最高学历不能为空" }],
+      proPhone: [
+        {
+          validate: val => this.val_mobile(this.form.proPhone),
+          message: "手机号格式有误"
+        }
+      ],
       isloading: false,
       scrollPickerShow: false,
       maps: [],
@@ -207,6 +255,19 @@ export default {
           });
         }
       });
+    },
+     //手机格式 204 必须以数字开头，除数字外，可含有-
+    val_mobile(str) {
+      let rtn = false;
+      if (str === "") {
+        rtn = true;
+      } else {
+        let reg = /^[1][3,4,5,7,8][0-9]{9}$/;
+        if (str.match(reg)) {
+          rtn = true;
+        }
+      }
+      return rtn;
     },
     gstarts(num) {
       this.typeNum = num;
