@@ -8,14 +8,16 @@ import educationMessage from '@/pages/entryFlow/childComponents/educationMessage
 import salaryMessage from '@/pages/entryFlow/childComponents/salaryMessage.vue'
 import workExperience from '@/pages/entryFlow/childComponents/workExperience.vue'
 import entryOfferPDFCont from '@/pages/entryFlow/newPdf.vue'
-
+import familyMessage from '@/pages/entryFlow/childComponents/familyMessage.vue'
+import friendMessage from '@/pages/entryFlow/childComponents/friendMessage.vue'
+import over from '@/pages/entryFlow/over.vue'
 Vue.use(Router)
 
 export default new Router({
-  routes: [{
+  routes: [
+    {
       path: '/',
       redirect: '/entryFlow',
-      component: entryFlow,
       meta: {
         vShow: true,
         title: '入职办理'
@@ -41,6 +43,14 @@ export default new Router({
       }
     },
     {
+      path: '/over',
+      name: 'over',
+      component: over,
+      meta: {
+        isShow: true
+      }
+    },
+    {
       path: '/entryFlowOffer',
       name: 'entryFlowOffer',
       component: entryFlowOffer,
@@ -58,14 +68,23 @@ export default new Router({
           }
         },
         {
-          path: '/entryFlowOffer/socialInsuranceMessage',
-          name: 'socialInsuranceMessage',
-          component: socialInsuranceMessage,
+          path: '/entryFlowOffer/familyMessage',
+          name: 'familyMessage',
+          component: familyMessage,
           meta: {
             vShow: true,
-            title: '社保信息'
+            title: '家庭信息'
           }
         },
+        // {
+        //   path: '/entryFlowOffer/socialInsuranceMessage',
+        //   name: 'socialInsuranceMessage',
+        //   component: socialInsuranceMessage,
+        //   meta: {
+        //     vShow: true,
+        //     title: '社保信息'
+        //   }
+        // },
         {
           path: '/entryFlowOffer/educationMessage',
           name: 'educationMessage',
@@ -92,7 +111,16 @@ export default new Router({
             vShow: true,
             title: '工作经历'
           }
-        }
+        },
+        {
+          path: '/entryFlowOffer/friendMessage',
+          name: 'friendMessage',
+          component: friendMessage,
+          meta: {
+            vShow: true,
+            title: '有无亲友在公司'
+          }
+        },
       ]
     }
   ]

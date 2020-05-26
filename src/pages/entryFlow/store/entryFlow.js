@@ -48,7 +48,8 @@ const entryFlow = {
       eductionInfo: false,
       salaryInfo: false,
       workInfo: false,
-      familyInfo:false
+      familyInfo:false,
+      friendInfo:false
     }
   },
   actions:{
@@ -145,6 +146,9 @@ const entryFlow = {
     },
     SetFamilyInfo(state,value) {
       state.infoMsgShow.familyInfo = value
+    },
+    SetFriendInfo(state,value) {
+      state.infoMsgShow.friendInfo = value
     },
     setUploadFileImage(state,value) {
       state.uploadFileImage = value

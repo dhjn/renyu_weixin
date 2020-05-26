@@ -4,8 +4,49 @@
     <mu-form ref="form" :model="form" class="mu-demo-form">
       <div class="message">
         <div class="messOne">
-          <span>毕业院校开始时间</span>
+          <span>姓名</span>
+          <span>
+            <mu-form-item prop="name">
+              <mu-text-field
+                placeholder="请填写"
+                v-model="form.name"
+              ></mu-text-field>
+            </mu-form-item>
+          </span>
+        </div>
+      </div>
+      <div class="message">
+        <div class="messOne">
+          <span>身份证号码</span>
+          <span>
+            <mu-form-item prop="identity">
+              <mu-text-field
+                placeholder="请填写"
+                v-model="form.identity"
+              ></mu-text-field>
+            </mu-form-item>
+          </span>
+        </div>
+      </div>
+      <div class="message">
+        <div class="messOne">
+          <span>最高学历</span>
           <span class="point">*</span>
+          <span>
+            <mu-form-item prop="education" :rules="education"> 
+              <mu-text-field
+                placeholder="请选择"
+                readonly="readonly"
+                v-model="educationName"
+                @focus="focus()"
+              ></mu-text-field>
+            </mu-form-item>
+          </span>
+        </div>
+      </div>
+      <div class="message">
+        <div class="messOne">
+          <span>毕业院校开始时间</span>
           <span>
             <mu-form-item prop="gstart" :rules="gstart">
               <mu-text-field
@@ -21,7 +62,6 @@
       <div class="message">
         <div class="messOne">
           <span>毕业院校结束时间</span>
-          <span class="point">*</span>
           <span>
             <mu-form-item prop="gend" :rules="gend">
               <mu-text-field
@@ -37,9 +77,8 @@
       <div class="message">
         <div class="messOne">
           <span>毕业院校</span>
-          <span class="point">*</span>
           <span>
-            <mu-form-item prop="graduation" :rules="graduation">
+            <mu-form-item prop="graduation">
               <mu-text-field
                 placeholder="请填写"
                 v-model="form.graduation"
@@ -63,12 +102,23 @@
         :endDate="endDate"
       >
       </mt-datetime-picker>
+      <div class="scrollPicker" v-show="scrollPickerShow">
+        <div class="scrollPickerChild">
+          <div class="selectBtn">
+            <div style="color: #3a72ed;" @click="scrollCancel">取消</div>
+            <div style="color: #3a72ed;" @click="scrollSure">确定</div>
+          </div>
+          <scroll-picker :maps="maps" :map.sync="map"></scroll-picker>
+        </div>
+      </div>
     </mu-form>
   </div>
 </template>
 
 <script>
 import { DatetimePicker } from "mint-ui";
+import dataArr from "./js/data2";
+import scrollPicker from "@/components/scrollPicker";
 import moment from "moment"; // 格式化时间
 import { Toast } from "mint-ui";
 export default {
@@ -78,42 +128,50 @@ export default {
       typeNum: "",
       startDate: new Date("2000-01-01"),
       endDate: new Date(),
-      pickerValue:new Date(),
+      pickerValue: new Date(),
+      educationOptions: [],
+      educationName: "",
       form: {
+        name: "",
+        identity: "",
+        education: "",
         gstart: "",
         gend: "",
         graduation: ""
       },
       gstart: [
-        { validate: val => !!val, message: "毕业院校开始时间不能为空" },
         {
           validate: val => this.judgeDate(this.form.gstart, this.form.gend),
           message: "毕业院校开始时间不能大于结束时间"
         }
       ],
       gend: [
-        { validate: val => !!val, message: "毕业院校结束时间不能为空" },
         {
           validate: val => this.judgeDate(this.form.gstart, this.form.gend),
           message: "毕业院校结束时间不能小于开始时间"
         }
       ],
-      graduation: [{ validate: val => !!val, message: "毕业院校不能为空" }],
-      isloading:false
+      education: [{ validate: val => !!val, message: "最高学历不能为空" }],
+      isloading: false,
+      scrollPickerShow: false,
+      maps: [],
+      map: {}
     };
   },
-  components: {},
+  components: {
+    scrollPicker
+  },
   methods: {
     submit() {
       const t = this;
       t.$refs.form.validate().then(result => {
         if (result) {
           let Token = localStorage.getItem("token");
-          let userId = localStorage.getItem('userId')
+          let userId = localStorage.getItem("userId");
           let data = Object.assign({}, t.form);
           data.type = "4";
-          data.userId = userId 
-          t.isloading = true
+          data.userId = userId;
+          t.isloading = true;
           this.http
             .post(`/api/saveuserinfo?Token=${Token}`, JSON.stringify(data))
             .then(res => {
@@ -127,7 +185,7 @@ export default {
                   "entryFlow/setFormData",
                   Object.assign(t.formData, t.form)
                 );
-                t.isloading = false
+                t.isloading = false;
                 t.$store.commit("entryFlow/SetEductionInfo", true);
                 t.$router.push({ path: "/entryFlowOffer" });
               } else {
@@ -152,14 +210,14 @@ export default {
     },
     gstarts(num) {
       this.typeNum = num;
-      this.pickerValue = new Date()
-      this.endDate = new Date()
+      this.pickerValue = new Date();
+      this.endDate = new Date();
       this.$refs.picker.open();
     },
     gends(num) {
       this.typeNum = num;
-      this.pickerValue = new Date()
-      this.endDate = new Date('2050-12-31')
+      this.pickerValue = new Date();
+      this.endDate = new Date("2050-12-31");
       this.$refs.picker.open();
     },
     handleConfirm(data) {
@@ -186,17 +244,59 @@ export default {
           return true;
         }
       }
+    },
+    scrollCancel() {
+      this.maps = [];
+      this.scrollPickerShow = false;
+    },
+    scrollSure() {
+      const t = this;
+      t.scrollPickerShow = false;
+      t.form.education = this.map.paramCode;
+      t.educationName = this.map.paramInfoName;
+      t.maps = [];
+      t.clear();
+    },
+    focus() {
+      const t = this;
+      let data = [];
+      data = t.educationOptions;
+      data.forEach((item, index) => {
+        let obj = {
+          paramInfoName: item.name,
+          paramCode: item.id
+        };
+        t.maps.push(obj);
+      });
+      t.map = t.maps[0];
+      t.scrollPickerShow = true;
+    },
+    generateArr(obj) {
+      let arr = [];
+      for (let v in obj) {
+        arr.push({
+          id: v,
+          name: obj[v]
+        });
+      }
+      return arr;
     }
   },
   mounted() {
     const t = this;
-    window.scrollTo(0,0)
+    window.scrollTo(0, 0);
+    t.educationOptions = t.generateArr(dataArr.education); // 转换最高学历数据
     for (let dat1 in t.formData) {
       for (let dat2 in t.form) {
         if (dat1 === dat2) {
           t.form[dat1] = t.formData[dat1];
         }
       }
+      t.educationOptions.forEach(item=>{
+        if(item.id===this.form.education){
+          this.educationName = item.name
+        }
+      })
     }
   },
   computed: {

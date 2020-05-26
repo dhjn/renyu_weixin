@@ -72,25 +72,25 @@
               <span>手机号 :</span>
               <span class="span1"> {{ formData.phone }}</span>
             </li>
-            <li>
+            <!-- <li>
               <span>工作省 :</span>
               <span class="span1"> {{ formData.province }}</span>
-            </li>
+            </li> -->
           </ul>
         </div>
-        <div class="div4" @click="uploadFile()">
+        <!-- <div class="div4" @click="uploadFile()">
           查看offer >>
-        </div>
+        </div> -->
       </div>
       <div
-        style="position: absolute;top: 11rem;width: 100%;"
+        style="position: absolute;top: 10rem;width: 100%;"
       >
-        <div class="sub_msg">
+        <!-- <div class="sub_msg">
           <img
             src="../../../static/entryFlow/entry_5.png"
             alt=""
           />本次登陆密码有效期为<span>24</span>小时，超过时限将自动失效
-        </div>
+        </div> -->
         <div class="sub_fotter">
           <button
             @click="acceptOffer('02writeMsg')"
@@ -133,16 +133,16 @@ export default {
     } else {
       t.$store.commit("entryFlow/SetUserInfo", false);
     }
-    //  社保信息
-    if (data.hasOwnProperty("ispaysb")) {
-      if (data.ispaysb === "") {
-        t.$store.commit("entryFlow/SetSocialInsranceInfo", false);
-      } else {
-        t.$store.commit("entryFlow/SetSocialInsranceInfo", true);
-      }
-    } else {
-      t.$store.commit("entryFlow/SetSocialInsranceInfo", false);
-    }
+    // //  社保信息
+    // if (data.hasOwnProperty("ispaysb")) {
+    //   if (data.ispaysb === "") {
+    //     t.$store.commit("entryFlow/SetSocialInsranceInfo", false);
+    //   } else {
+    //     t.$store.commit("entryFlow/SetSocialInsranceInfo", true);
+    //   }
+    // } else {
+    //   t.$store.commit("entryFlow/SetSocialInsranceInfo", false);
+    // }
     //  教育信息
     if (data.hasOwnProperty("graduation")) {
       if (data.graduation === "") {
@@ -213,14 +213,14 @@ export default {
         });
         return false;
       }
-      if (t.socialInsranceInfoShow !== true) {
-        Toast({
-          message: "请完善社保信息才能走下一步",
-          position: "middle",
-          duration: 2000
-        });
-        return false;
-      }
+      // if (t.socialInsranceInfoShow !== true) {
+      //   Toast({
+      //     message: "请完善社保信息才能走下一步",
+      //     position: "middle",
+      //     duration: 2000
+      //   });
+      //   return false;
+      // }
       if (t.eductionInfoShow !== true) {
         Toast({
           message: "请完善最高学历信息才能走下一步",
@@ -371,7 +371,7 @@ export default {
   color: #718a9d;
   display: flex;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 50px;
   img {
     width: 60px;
   }
@@ -405,7 +405,7 @@ export default {
 }
 .submit {
   width: 90%;
-  height: 600px;
+  height: 6rem;
   background: white;
   position: absolute;
   top: 250px;

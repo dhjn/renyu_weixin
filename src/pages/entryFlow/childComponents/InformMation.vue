@@ -14,8 +14,11 @@
           <span>
             <mu-form-item prop="birthloc" :rules="birthloc">
               <mu-text-field
-                placeholder="请填写"
-                v-model="form.birthloc"
+                placeholder="请选择"
+                readonly="readonly"
+                @focus="focus2('birthloc')"
+                ref="birthloc"
+                v-model="birthlocName"
               ></mu-text-field>
             </mu-form-item>
           </span>
@@ -31,7 +34,7 @@
                 placeholder="请选择"
                 v-model="nationName"
                 readonly="readonly"
-                @focus="focus(1)"
+                @focus="focus2('nation')"
               ></mu-text-field>
             </mu-form-item>
           </span>
@@ -114,6 +117,20 @@
       </div>
       <div class="message">
         <div class="messOne">
+          <span>兴趣爱好</span>
+          <span>
+            <mu-form-item prop="hobbies">
+              <mu-text-field
+                placeholder="请填写"
+                max-length="22"
+                v-model="form.hobbies"
+              ></mu-text-field>
+            </mu-form-item>
+          </span>
+        </div>
+      </div>
+      <div class="message">
+        <div class="messOne">
           <span>子女状况</span>
           <span class="point">*</span>
           <span style="display: inline-block;width: 3rem;padding-top:6px;">
@@ -149,9 +166,8 @@
       <div class="message">
         <div class="messOne">
           <span>有效法律文件邮寄邮政编码</span>
-          <span class="point">*</span>
           <span>
-            <mu-form-item prop="effpostcode" :rules="effpostcode">
+            <mu-form-item prop="effpostcode">
               <mu-text-field
                 placeholder="请填写"
                 v-model="form.effpostcode"
@@ -169,6 +185,7 @@
               <mu-text-field
                 placeholder="请填写"
                 v-model="form.residence"
+                max-length="22"
               ></mu-text-field>
             </mu-form-item>
           </span>
@@ -253,6 +270,7 @@
               <mu-text-field
                 placeholder="请选择"
                 readonly="readonly"
+                disabled
                 v-model="preempstatName"
                 @focus="focus(6)"
               ></mu-text-field>
@@ -270,11 +288,13 @@
                 v-model="form.keeplabor"
                 value="p_withold"
                 label="是"
+                disabled
               ></mu-radio>
               <mu-radio
                 v-model="form.keeplabor"
                 value="p_withoutold"
                 label="否"
+                disabled
               ></mu-radio>
             </mu-form-item>
           </span>
@@ -283,9 +303,8 @@
       <div class="message">
         <div class="messOne">
           <span>档案所在地</span>
-          <span class="point">*</span>
           <span>
-            <mu-form-item prop="recordloc" :rules="recordloc">
+            <mu-form-item prop="recordloc">
               <mu-text-field
                 placeholder="请选择"
                 v-model="recordlocName"
@@ -340,10 +359,9 @@
       </div>
       <div class="message">
         <div class="messOne">
-          <span>健康证的录入</span>
-          <span class="point">*</span>
+          <span>健康证号码</span>
           <span>
-            <mu-form-item prop="ifjkz" :rules="ifjkz">
+            <mu-form-item prop="ifjkz">
               <mu-text-field
                 placeholder="请填写"
                 v-model="form.ifjkz"
@@ -355,7 +373,6 @@
       <div class="message">
         <div class="messOne">
           <span>健康证开始时间</span>
-          <span class="point">*</span>
           <span>
             <mu-form-item prop="jkzsdate" :rules="jkzsdate">
               <mu-text-field
@@ -371,7 +388,6 @@
       <div class="message">
         <div class="messOne">
           <span>健康证到期时间</span>
-          <span class="point">*</span>
           <span>
             <mu-form-item prop="jkzedate" :rules="jkzedate">
               <mu-text-field
@@ -384,7 +400,7 @@
           </span>
         </div>
       </div>
-      <div class="message">
+      <!-- <div class="message">
         <div class="messOne">
           <span>身份证到期日期</span>
           <span class="point">*</span>
@@ -399,7 +415,7 @@
             </mu-form-item>
           </span>
         </div>
-      </div>
+      </div> -->
       <div @click="submit" class="submit">
         保存
       </div>
@@ -415,13 +431,27 @@
         :endDate="endDate"
       >
       </mt-datetime-picker>
-      <div class="scrollPicker" v-show="scrollPickerShow">
+      <div class="scrollPicker" v-if="scrollPickerShow">
         <div class="scrollPickerChild">
           <div class="selectBtn">
             <div style="color: #3a72ed;" @click="scrollCancel">取消</div>
             <div style="color: #3a72ed;" @click="scrollSure">确定</div>
           </div>
           <scroll-picker :maps="maps" :map.sync="map"></scroll-picker>
+        </div>
+      </div>
+      <div class="scrollPicker" v-if="pickerShow">
+        <div class="scrollPickerChild">
+          <div class="selectBtn">
+            <div style="color: #3a72ed;" @click="cancel">取消</div>
+            <div style="color: #3a72ed;" @click="sure">确定</div>
+          </div>
+          <mt-picker
+            :slots="slots"
+            value-Key="name"
+            :show-toolbar="true"
+            @change="onValuesChange"
+          ></mt-picker>
         </div>
       </div>
     </mu-form>
@@ -433,7 +463,7 @@ import { DatetimePicker } from "mint-ui";
 import moment from "moment"; // 格式化时间
 import Bus from "../../../lib/bus";
 import scrollPicker from "@/components/scrollPicker";
-import { Toast } from "mint-ui";
+import { Toast, Picker } from "mint-ui";
 import nationData from "./js/data";
 import dataArr from "./js/data2";
 import validate from "../../../lib/pub_valid";
@@ -444,6 +474,9 @@ export default {
       startDate: new Date("1970-01-01"),
       endDate: new Date(),
       pickerValue: new Date(),
+      provinceOptions: [], // 省份数组加id
+      provinceArr: [],
+      cityOptions: [],
       nationOptions: [],
       nationName: "",
       polstatusOptions: [],
@@ -459,6 +492,7 @@ export default {
       recordlocOptions: [],
       recordlocName: "",
       typeNum: "",
+      birthlocName: "",
       value: "0",
       form: {
         birthloc: "",
@@ -467,6 +501,7 @@ export default {
         education: "",
         hukou: "",
         hkdf: "",
+        hobbies: "",
         hkpostcode: "",
         childstatus: "",
         effloc: "",
@@ -498,14 +533,10 @@ export default {
       effloc: [
         { validate: val => !!val, message: "有效法律文件邮寄地址不能为空" }
       ],
-      effpostcode: [
-        { validate: val => !!val, message: "有效法律文件邮寄邮政编码不能为空" }
-      ],
       residence: [{ validate: val => !!val, message: "现在居住地址不能为空" }],
       marital: [{ validate: val => !!val, message: "婚育状况不能为空" }],
       preempstat: [{ validate: val => !!val, message: "前期就业状态不能为空" }],
       keeplabor: [{ validate: val => !!val, message: "该项不能为空" }],
-      recordloc: [{ validate: val => !!val, message: "档案所在地不能为空" }],
       mpct: [{ validate: val => !!val, message: "紧急联系人不能为空" }],
       mprelation: [
         { validate: val => !!val, message: "紧急联系人关系不能为空" }
@@ -517,9 +548,7 @@ export default {
           message: "紧急联系人电话输入有误"
         }
       ],
-      ifjkz: [{ validate: val => !!val, message: "健康证录入项不能为空" }],
       jkzsdate: [
-        { validate: val => !!val, message: "健康证开始时间不能为空" },
         {
           validate: val =>
             this.judgeDate(this.form.jkzsdate, this.form.jkzedate),
@@ -527,7 +556,6 @@ export default {
         }
       ],
       jkzedate: [
-        { validate: val => !!val, message: "健康证到期时间不能为空" },
         {
           validate: val =>
             this.judgeDate(this.form.jkzsdate, this.form.jkzedate),
@@ -536,10 +564,44 @@ export default {
       ],
       idendate: [{ validate: val => !!val, message: "身份证到期日期不能为空" }],
       scrollPickerShow: false,
+      pickerShow: false,
       scrollType: "",
+      scrollType2: "",
       maps: [],
       map: {},
-      isloading: false
+      isloading: false,
+      slots: [],
+      slots1: [
+        {
+          flex: 1,
+          values: ["请选择"],
+          className: "slot1",
+          textAlign: "right"
+        },
+        {
+          divider: true,
+          content: "-",
+          className: "slot2"
+        },
+        {
+          flex: 1,
+          values: ["请选择"],
+          className: "slot3",
+          textAlign: "left"
+        }
+      ],
+      slots2: [
+        {
+          flex: 1,
+          values: [],
+          className: "slot1",
+          textAlign: "center"
+        }
+      ],
+      resultArr: [],
+      handler: function(e) {
+        e.preventDefault();
+      }
     };
   },
   components: {
@@ -597,10 +659,7 @@ export default {
     focus(type) {
       const t = this;
       let data = [];
-      if (type === 1) {
-        data = t.nationOptions;
-        t.scrollType = "nationality";
-      } else if (type === 2) {
+      if (type === 2) {
         data = t.polstatusOptions;
         t.scrollType = "polstatus";
       } else if (type === 3) {
@@ -645,10 +704,6 @@ export default {
           t.form.education = this.map.paramCode;
           t.educationName = this.map.paramInfoName;
           break;
-        case "nationality":
-          t.form.nation = this.map.paramCode;
-          t.nationName = this.map.paramInfoName;
-          break;
         case "hukou":
           t.form.hukou = this.map.paramCode;
           t.hukouName = this.map.paramInfoName;
@@ -668,6 +723,44 @@ export default {
       }
       t.maps = [];
       t.clear();
+    },
+    focus2(type) {
+      let t = this;
+      if (type === "nation") {
+        let arr = [];
+        t.nationOptions.forEach(item => {
+          arr.push(item.name);
+        });
+        t.slots2[0].values = arr;
+        t.scrollType2 = "nation";
+        t.slots = t.slots2;
+      } else {
+        t.scrollType2 = "birthloc";
+        t.slots = t.slots1;
+      }
+      t.pickerShow = true;
+    },
+    cancel() {
+      this.pickerShow = false;
+    },
+    sure() {
+      if (this.scrollType2 === "birthloc") {
+        this.birthlocName = this.resultArr[1];
+        this.cityOptions.forEach(item => {
+          if (this.birthlocName === item.name) {
+            this.form.birthloc = item.id;
+          }
+        });
+      } else {
+        this.nationName = this.resultArr[0];
+        this.nationOptions.forEach(item => {
+          if (this.nationName === item.name) {
+            this.form.nation = item.id;
+          }
+        });
+      }
+      this.clear();
+      this.pickerShow = false;
     },
     firstwkdate(num) {
       this.typeNum = num;
@@ -706,6 +799,46 @@ export default {
       }
       return arr;
     },
+    // 获取城市、开户行的公共方法
+    getData(type, id) {
+      const t = this;
+      let Token = localStorage.getItem("token");
+      let userId = localStorage.getItem("userId");
+      let arr = [];
+      let params = {
+        type: type,
+        userId: userId,
+        Token: Token
+      };
+      if (id) {
+        params.pid = id;
+      }
+      t.http
+        .get("/api/getbaseinfo", { params })
+        .then(res => {
+          let data = res.data.data;
+          for (let i in data) {
+            arr.push({ id: i, name: data[i] });
+          }
+          if (type === "province") {
+            t.provinceOptions = arr;
+            t.provinceOptions.forEach(item => {
+              t.provinceArr.push(item.name);
+            });
+            t.slots1[0].values = t.provinceArr;
+          } else if (type === "city") {
+            t.cityOptions = arr;
+            t.cityOptions.forEach((item, index) => {
+              if (t.form.birthloc === item.id) {
+                t.birthlocName = item.name;
+              }
+            });
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
     judgeDate(start, end) {
       if (start === "" || end === "") {
         return true;
@@ -716,11 +849,73 @@ export default {
           return true;
         }
       }
+    },
+    onValuesChange(picker, values) {
+      let t = this;
+      if (t.scrollType2 === "birthloc") {
+        let arr = [];
+        let id = "";
+        t.provinceOptions.forEach(item => {
+          if (values[0] === item.name) {
+            id = item.id;
+          }
+        });
+        t.area(id).then(function(data) {
+          data.forEach(item => {
+            arr.push(item.name);
+          });
+          picker.setSlotValues(1, arr);
+        });
+        this.resultArr = picker.getValues();
+      } else {
+        this.resultArr = picker.getValues();
+      }
+    },
+    area(id) {
+      let t = this;
+      let Token = localStorage.getItem("token");
+      let userId = localStorage.getItem("userId");
+      let arr = [];
+      let promise = new Promise(function(resolve, reject) {
+        let params = {
+          type: "city",
+          pid: id,
+          userId: userId,
+          Token: Token
+        };
+        t.http
+          .get("/api/getbaseinfo", { params })
+          .then(function(res) {
+            let data = res.data.data;
+            for (let i in data) {
+              arr.push({ id: i, name: data[i] });
+            }
+            resolve(arr);
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+      });
+      return promise;
+    },
+    async init() {
+      await this.getData("province");
+      await this.getData("city");
+    },
+    closeTouch() {
+      document.body.addEventListener("touchmove", this.handler, {
+        passive: false
+      }); //阻止默认事件
+    },
+    openTouch() {
+      document.body.removeEventListener("touchmove", this.handler, {
+        passive: false
+      }); //打开默认事件
     }
   },
   mounted() {
     const t = this;
-    document.body.style.overflow= "scroll";
+    document.body.style.overflow = "scroll";
     t.nationOptions = t.generateArr(nationData.data[0]); // 转换民族数据
     t.polstatusOptions = t.generateArr(dataArr.polstatus); // 转换政治面貌数据
     t.educationOptions = t.generateArr(dataArr.education); // 转换最高学历数据
@@ -735,6 +930,9 @@ export default {
         }
       }
     }
+    t.form.keeplabor = "p_withoutold";
+    t.form.preempstat = "p_02leav";
+    t.init();
     for (let key in t.nationOptions) {
       if (t.form.nation === t.nationOptions[key].id) {
         t.nationName = t.nationOptions[key].name;
@@ -771,6 +969,22 @@ export default {
       }
     }
   },
+  watch: {
+    pickerShow(val) {
+      if (val) {
+        this.closeTouch();
+      } else {
+        this.openTouch();
+      }
+    },
+    scrollPickerShow(val) {
+      if (val) {
+        this.closeTouch();
+      } else {
+        this.openTouch();
+      }
+    }
+  },
   computed: {
     formData() {
       if (Object.keys(this.$store.state.entryFlow.formData).length == 0) {
@@ -798,6 +1012,9 @@ export default {
 }
 .message .messOne {
   margin: 0.8rem 0;
+}
+/deep/ .mu-input-help {
+  display: none;
 }
 /deep/ .mu-loading-wrap {
   position: fixed;

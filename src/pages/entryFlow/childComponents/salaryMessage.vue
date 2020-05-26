@@ -12,7 +12,7 @@
                 placeholder="请选择"
                 readonly="readonly"
                 v-model="bcardcityName"
-                @focus="focus(1)"
+                @focus="focus('city')"
               ></mu-text-field>
             </mu-form-item>
           </span>
@@ -21,14 +21,14 @@
       <div class="message">
         <div class="messOne">
           <span>开户银行</span>
-          <span class="point">*</span>
+          <!-- <span class="point">*</span> -->
           <span>
-            <mu-form-item prop="bank" :rules="bank">
+            <mu-form-item prop="bank">
               <mu-text-field
                 placeholder="请选择"
                 readonly="readonly"
                 v-model="bankName"
-                @focus="focus(2)"
+                @focus="focus('bank')"
               ></mu-text-field>
             </mu-form-item>
           </span>
@@ -36,10 +36,10 @@
       </div>
       <div class="message">
         <div class="messOne">
-          <span>开户行全称</span>
-          <span class="point">*</span>
+          <span>开户行全称(重要)</span>
+          <!-- <span class="point">*</span> -->
           <span>
-            <mu-form-item prop="bankname" :rules="bankname">
+            <mu-form-item prop="bankname">
               <mu-text-field
                 placeholder="请填写"
                 v-model="form.bankname"
@@ -65,13 +65,18 @@
       <div @click="submit" class="submit">
         保存
       </div>
-      <div class="scrollPicker" v-show="scrollPickerShow">
+      <div class="scrollPicker" v-if="pickerShow">
         <div class="scrollPickerChild">
           <div class="selectBtn">
-            <div style="color: #3a72ed;" @click="scrollCancel">取消</div>
-            <div style="color: #3a72ed;" @click="scrollSure">确定</div>
+            <div style="color: #3a72ed;" @click="cancel">取消</div>
+            <div style="color: #3a72ed;" @click="sure">确定</div>
           </div>
-          <scroll-picker :maps="maps" :map.sync="map"></scroll-picker>
+          <mt-picker
+            :slots="slots"
+            value-Key="name"
+            :show-toolbar="true"
+            @change="onValuesChange"
+          ></mt-picker>
         </div>
       </div>
     </mu-form>
@@ -79,32 +84,63 @@
 </template>
 
 <script>
-import scrollPicker from "@/components/scrollPicker";
-import { Toast } from "mint-ui";
-import qs from 'qs'
+import { Toast, Picker } from "mint-ui";
+import qs from "qs";
+import axios from "axios";
 export default {
   name: "salaryMessage",
   data() {
     return {
+      cityArr: [],
+      provinceArr: [],
       bcardcityOptions: [],
       bcardcityName: "",
+      provinceOptions: [], // 省份数组加id
+      province: "", // 省份
       bankOptions: [],
       bankName: "",
       form: {
         bcardcity: "",
         bank: "",
-        bankname:'',
-        bcard:''
+        bankname: "",
+        bcard: ""
       },
       bcardcity: [{ validate: val => !!val, message: "开户城市不能为空" }],
-      bank: [{ validate: val => !!val, message: "开户银行不能为空" }],
-      bankname: [{ validate: val => !!val, message: "开户银行全称不能为空" }],
+      // bank: [{ validate: val => !!val, message: "开户银行不能为空" }],
+      // bankname: [{ validate: val => !!val, message: "开户银行全称不能为空" }],
       bcard: [{ validate: val => !!val, message: "银行卡号不能为空" }],
-      maps: [],
-      map: {},
       scrollType: "",
-      scrollPickerShow: false,
-      isloading:false
+      pickerShow: false,
+      isloading: false,
+      slots: [],
+      slots1: [
+        {
+          flex: 1,
+          values: ["请选择"],
+          className: "slot1",
+          textAlign: "right"
+        },
+        {
+          divider: true,
+          content: "-",
+          className: "slot2"
+        },
+        {
+          flex: 1,
+          values: ["请选择"],
+          className: "slot3",
+          textAlign: "left"
+        }
+      ],
+      slots2: [
+        {
+          flex: 1,
+          values: [],
+          className: "slot1",
+          textAlign: "center"
+        }
+      ],
+      resultArr: []
     };
   },
   methods: {
@@ -116,11 +152,11 @@ export default {
       t.$refs.form.validate().then(result => {
         if (result) {
           let Token = localStorage.getItem("token");
-          let userId = localStorage.getItem('userId')
+          let userId = localStorage.getItem("userId");
           let data = Object.assign({}, t.form);
           data.type = "3";
-          data.userId = userId 
-          t.isloading = true
+          data.userId = userId;
+          t.isloading = true;
           this.http
             .post(`/api/saveuserinfo?Token=${Token}`, JSON.stringify(data))
             .then(res => {
@@ -134,7 +170,7 @@ export default {
                   "entryFlow/setFormData",
                   Object.assign(t.formData, t.form)
                 );
-                t.isloading = false
+                t.isloading = false;
                 t.$store.commit("entryFlow/SetSalaryInfo", true);
                 t.$router.push({ path: "/entryFlowOffer" });
               } else {
@@ -157,71 +193,78 @@ export default {
         }
       });
     },
-    scrollCancel() {
-      this.maps = [];
-      this.scrollPickerShow = false;
+    cancel() {
+      this.pickerShow = false;
     },
-    scrollSure() {
-      const t = this;
-      t.scrollPickerShow = false;
-      switch (t.scrollType) {
-        case "bcardcity":
-          t.bcardcityName = this.map.paramInfoName;
-          t.form.bcardcity = this.map.paramCode;
-          break;
-        case "bank":
-          t.bankName = this.map.paramInfoName;
-          t.form.bank = this.map.paramCode;
-          break;
+    sure() {
+      if(this.scrollType==='bank'){
+        this.bankName = this.resultArr[0];
+        this.bankOptions.forEach(item => {
+          if (this.bankName === item.name) {
+            this.form.bank = item.id;
+          }
+        });
+      } else {
+        this.bcardcityName = this.resultArr[1];
+        this.bcardcityOptions.forEach(item => {
+          if (this.bcardcityName === item.name) {
+            this.form.bcardcity = item.id;
+          }
+        });
       }
-      t.maps = [];
-      t.clear();
+      this.pickerShow = false;
     },
     focus(type) {
-      const t = this;
-      let data = [];
-      if (type === 1) {
-        data = t.bcardcityOptions;
-        t.scrollType = "bcardcity";
-      } else {
-        data = t.bankOptions;
+      let t = this;
+      if (type === "bank") {
+        let arr = [];
+        t.bankOptions.forEach(item => {
+          arr.push(item.name);
+        });
+        t.slots2[0].values = arr;
         t.scrollType = "bank";
+        t.slots = t.slots2;
+      } else {
+        t.scrollType = "city";
+        t.slots = t.slots1;
       }
-      data.forEach((item, index) => {
-        let obj = {
-          paramInfoName: item.name,
-          paramCode: item.id
-        };
-        t.maps.push(obj);
-      });
-      t.map = t.maps[0];
-      t.scrollPickerShow = true;
+      t.pickerShow = true;
     },
     // 获取城市、开户行的公共方法
-    getData(type) {
+    getData(type, id) {
       const t = this;
-      let Token = localStorage.getItem('token')
-      let userId = localStorage.getItem('userId')
+      let Token = localStorage.getItem("token");
+      let userId = localStorage.getItem("userId");
       let arr = [];
       let params = {
-        type:type,
-        userId:userId,
-        Token:Token
+        type: type,
+        userId: userId,
+        Token: Token
+      };
+      if (id) {
+        params.pid = id;
       }
-      this.http
-        .get("/api/getbaseinfo",{ params }) 
+      t.http
+        .get("/api/getbaseinfo", { params })
         .then(res => {
+          console.log(type);
           let data = res.data.data;
           for (let i in data) {
             arr.push({ id: i, name: data[i] });
           }
-          if (type === "city") {
+          if (type === "province") {
+            t.provinceOptions = arr;
+            t.provinceOptions.forEach(item => {
+              t.provinceArr.push(item.name);
+            });
+            t.slots1[0].values = t.provinceArr;
+          } else if (type === "city") {
             t.bcardcityOptions = arr;
             t.bcardcityOptions.forEach((item, index) => {
               if (t.form.bcardcity === item.id) {
                 t.bcardcityName = item.name;
               }
-            })
+            });
           } else {
             t.bankOptions = arr;
             t.bankOptions.forEach((item, index) => {
@@ -230,24 +273,75 @@ export default {
               }
             });
           }
+          console.log(type);
         })
         .catch(err => {
           console.log(err);
         });
+    },
+    onValuesChange(picker, values) {
+      let t = this;
+      if (t.scrollType === "city") {
+        let arr = [];
+        let id = "";
+        t.provinceOptions.forEach(item => {
+          if (values[0] === item.name) {
+            id = item.id;
+          }
+        });
+        t.area(id).then(function(data) {
+          data.forEach(item => {
+            arr.push(item.name);
+          });
+          picker.setSlotValues(1, arr);
+        });
+      }
+      this.resultArr = picker.getValues();
+    },
+    area(id) {
+      let t = this;
+      let Token = localStorage.getItem("token");
+      let userId = localStorage.getItem("userId");
+      let arr = [];
+      let promise = new Promise(function(resolve, reject) {
+        let params = {
+          type: "city",
+          pid: id,
+          userId: userId,
+          Token: Token
+        };
+        t.http
+          .get("/api/getbaseinfo", { params })
+          .then(function(res) {
+            let data = res.data.data;
+            for (let i in data) {
+              arr.push({ id: i, name: data[i] });
+            }
+            resolve(arr);
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+      });
+      return promise;
+    },
+    async init() {
+      await this.getData("province");
+      await this.getData("city");
+      await this.getData("bank");
     }
   },
   mounted() {
     const t = this;
-    window.scrollTo(0,0)
-      for (let dat1 in t.formData) {
-        for (let dat2 in t.form) {
-          if (dat1 === dat2) {
-            t.form[dat1] = t.formData[dat1];
-          }
+    window.scrollTo(0, 0);
+    for (let dat1 in t.formData) {
+      for (let dat2 in t.form) {
+        if (dat1 === dat2) {
+          t.form[dat1] = t.formData[dat1];
         }
       }
-    t.getData('city');
-    t.getData('bank');
+    }
+    t.init();
   },
   computed: {
     formData() {
@@ -256,9 +350,6 @@ export default {
       }
       return this.$store.state.entryFlow.formData;
     }
-  },
-  components: {
-    scrollPicker
   }
 };
 </script>
@@ -274,10 +365,13 @@ export default {
   line-height: 2;
   font-size: inherit;
 }
+/deep/ .picker-item {
+  font-size: 36px;
+}
 /deep/ .mu-form-item {
   padding: 0;
   margin: 0;
-//   height: 100%;
+  //   height: 100%;
 }
 /deep/ .mu-select-content {
   height: 100%;
@@ -287,7 +381,7 @@ export default {
   }
 }
 /deep/ .mu-form-item-content {
-//   height: 100%;
+  //   height: 100%;
 }
 /deep/ .mu-input-content {
   height: 100%;

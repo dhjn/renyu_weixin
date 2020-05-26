@@ -31,6 +31,35 @@
     </div>
 
     <div class="msg_one">
+      <router-link to="/entryFlowOffer/familyMessage" tag="div">
+        <div class="msg_one_top">
+          <div class="msg_one_title">
+            <img
+              class="Image1"
+              src="../../../static/entryFlow/家庭.png"
+              alt=""
+            />
+            <span>家庭信息</span>
+          </div>
+          <div>
+            <img
+              src="../../../static/entryFlow/entry_13.png"
+              alt=""
+              class="Image1"
+              v-show="!familyInfoShow"
+            />
+            <img
+              class="Image1"
+              src="../../../static/entryFlow/entry_12.png"
+              alt=""
+              v-show="familyInfoShow"
+            />
+          </div>
+        </div>
+      </router-link>
+    </div>
+
+    <!-- <div class="msg_one">
       <router-link to="/entryFlowOffer/socialInsuranceMessage" tag="div">
         <div class="msg_one_top">
           <div class="msg_one_title">
@@ -57,7 +86,7 @@
           </div>
         </div>
       </router-link>
-    </div>
+    </div> -->
 
     <div class="msg_one">
       <router-link to="/entryFlowOffer/salaryMessage" tag="div">
@@ -68,7 +97,7 @@
               src="../../../static/entryFlow/银行卡信息.png"
               alt=""
             />
-            <span>工资信息</span>
+            <span>工资卡信息</span>
           </div>
           <div>
             <img
@@ -159,6 +188,35 @@
       </router-link>
     </div>
 
+    <div class="msg_one">
+      <router-link to="/entryFlowOffer/friendMessage" tag="div">
+        <div class="msg_one_top">
+          <div class="msg_one_title">
+            <img
+              class="Image1"
+              src="../../../static/entryFlow/家庭.png"
+              alt=""
+            />
+            <span>有无亲友在公司</span>
+          </div>
+          <div>
+            <img
+              src="../../../static/entryFlow/entry_13.png"
+              alt=""
+              class="Image1"
+              v-show="!friendInfoShow"
+            />
+            <img
+              class="Image1"
+              src="../../../static/entryFlow/entry_12.png"
+              alt=""
+              v-show="friendInfoShow"
+            />
+          </div>
+        </div>
+      </router-link>
+    </div>
+
     <div class="sub_fotter">
       <button @click="acceptOfferOne">上一步</button>
       <button @click="acceptOfferTwo">下一步</button>
@@ -206,14 +264,14 @@ export default {
         });
         return false;
       }
-      if (t.socialInsranceInfoShow !== true) {
-        Toast({
-          message: "请完善社保信息才能走下一步",
-          position: "middle",
-          duration: 2000
-        });
-        return false;
-      }
+      // if (t.socialInsranceInfoShow !== true) {
+      //   Toast({
+      //     message: "请完善社保信息才能走下一步",
+      //     position: "middle",
+      //     duration: 2000
+      //   });
+      //   return false;
+      // }
       if (t.eductionInfoShow !== true) {
         Toast({
           message: "请完善学历信息才能走下一步",
@@ -248,9 +306,12 @@ export default {
     userInfoShow() {
       return this.$store.state.entryFlow.infoMsgShow.userInfo;
     },
-    socialInsranceInfoShow() {
-      return this.$store.state.entryFlow.infoMsgShow.socialInsranceInfo;
+    familyInfoShow() {
+      return this.$store.state.entryFlow.infoMsgShow.familyInfo;
     },
+    // socialInsranceInfoShow() {
+    //   return this.$store.state.entryFlow.infoMsgShow.socialInsranceInfo;
+    // },
     eductionInfoShow() {
       return this.$store.state.entryFlow.infoMsgShow.eductionInfo;
     },
@@ -259,14 +320,16 @@ export default {
     },
     workInfoShow() {
       return this.$store.state.entryFlow.infoMsgShow.workInfo;
-    }
+    },
+    friendInfoShow() {
+      return this.$store.state.entryFlow.infoMsgShow.friendInfo;
+    },
   }
 };
 </script>
 <style scoped lang="less" type="text/less">
 .write_msg {
   width: 100%;
-  height: calc(100% - 320px);
   overflow-y: scroll;
   background: rgba(244, 246, 250, 1);
   .msg_one {

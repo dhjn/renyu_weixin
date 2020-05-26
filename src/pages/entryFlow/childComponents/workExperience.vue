@@ -52,8 +52,8 @@
           <span class="point">*</span>
           <span style="display: inline-block;width: 4rem;padding-top:6px;">
             <mu-form-item prop="issick" :rules="issick">
-              <mu-radio v-model="form.issick" value="0" label="否"></mu-radio>
-              <mu-radio v-model="form.issick" value="1" label="是"></mu-radio>
+              <mu-radio v-model="form.issick" value="0" label="否" disabled></mu-radio>
+              <mu-radio v-model="form.issick" value="1" label="是" disabled></mu-radio>
             </mu-form-item>
           </span>
         </div>
@@ -64,8 +64,8 @@
           <span class="point">*</span>
           <span style="display: inline-block;width: 4rem;padding-top:6px;">
             <mu-form-item prop="poc" :rules="poc">
-              <mu-radio v-model="form.poc" value="0" label="否"></mu-radio>
-              <mu-radio v-model="form.poc" value="1" label="是"></mu-radio>
+              <mu-radio v-model="form.poc" value="0" label="否" disabled></mu-radio>
+              <mu-radio v-model="form.poc" value="1" label="是" disabled></mu-radio>
             </mu-form-item>
           </span>
         </div>
@@ -80,11 +80,13 @@
                 v-model="form.pbehaivor"
                 value="0"
                 label="否"
+                disabled
               ></mu-radio>
               <mu-radio
                 v-model="form.pbehaivor"
                 value="1"
                 label="是"
+                disabled
               ></mu-radio>
             </mu-form-item>
           </span>
@@ -96,8 +98,8 @@
           <span class="point">*</span>
           <span style="display: inline-block;width: 4rem;padding-top:6px;">
             <mu-form-item prop="whsystem" :rules="whsystem">
-              <mu-radio v-model="form.whsystem" value="0" label="否"></mu-radio>
-              <mu-radio v-model="form.whsystem" value="1" label="是"></mu-radio>
+              <mu-radio v-model="form.whsystem" value="0" label="否" disabled></mu-radio>
+              <mu-radio v-model="form.whsystem" value="1" label="是" disabled></mu-radio>
             </mu-form-item>
           </span>
         </div>
@@ -108,8 +110,8 @@
           <span class="point">*</span>
           <span style="display: inline-block;width:4rem;padding-top:6px;">
             <mu-form-item prop="rar" :rules="rar">
-              <mu-radio v-model="form.rar" value="0" label="否"></mu-radio>
-              <mu-radio v-model="form.rar" value="1" label="是"></mu-radio>
+              <mu-radio v-model="form.rar" value="0" label="否" disabled></mu-radio>
+              <mu-radio v-model="form.rar" value="1" label="是" disabled></mu-radio>
             </mu-form-item>
           </span>
         </div>
@@ -120,8 +122,8 @@
           <span class="point">*</span>
           <span style="display: inline-block;width:4rem;padding-top:6px;">
             <mu-form-item prop="labor" :rules="labor">
-              <mu-radio v-model="form.labor" value="0" label="否"></mu-radio>
-              <mu-radio v-model="form.labor" value="1" label="是"></mu-radio>
+              <mu-radio v-model="form.labor" value="0" label="否" disabled></mu-radio>
+              <mu-radio v-model="form.labor" value="1" label="是" disabled></mu-radio>
             </mu-form-item>
           </span>
         </div>
@@ -132,8 +134,8 @@
           <span class="point">*</span>
           <span style="display: inline-block;width:4rem;padding-top:6px;">
             <mu-form-item prop="critical" :rules="critical">
-              <mu-radio v-model="form.critical" value="0" label="否"></mu-radio>
-              <mu-radio v-model="form.critical" value="1" label="是"></mu-radio>
+              <mu-radio v-model="form.critical" value="0" label="否" disabled></mu-radio>
+              <mu-radio v-model="form.critical" value="1" label="是" disabled></mu-radio>
             </mu-form-item>
           </span>
         </div>
@@ -148,11 +150,13 @@
                 v-model="form.disaction"
                 value="0"
                 label="否"
+                disabled
               ></mu-radio>
               <mu-radio
                 v-model="form.disaction"
                 value="1"
                 label="是"
+                disabled
               ></mu-radio>
             </mu-form-item>
           </span>
@@ -168,11 +172,13 @@
                 v-model="form.hinderwork"
                 value="0"
                 label="否"
+                disabled
               ></mu-radio>
               <mu-radio
                 v-model="form.hinderwork"
                 value="1"
                 label="是"
+                disabled
               ></mu-radio>
             </mu-form-item>
           </span>
@@ -184,8 +190,8 @@
           <span class="point">*</span>
           <span style="display: inline-block;width:4rem;padding-top:6px;">
             <mu-form-item prop="parttime" :rules="parttime">
-              <mu-radio v-model="form.parttime" value="0" label="否"></mu-radio>
-              <mu-radio v-model="form.parttime" value="1" label="是"></mu-radio>
+              <mu-radio v-model="form.parttime" value="0" label="否" disabled></mu-radio>
+              <mu-radio v-model="form.parttime" value="1" label="是" disabled></mu-radio>
             </mu-form-item>
           </span>
         </div>
@@ -227,16 +233,16 @@ export default {
         wstart: "",
         wend: "",
         workplace: "",
-        issick: "",
-        poc: "",
-        pbehaivor: "",
-        whsystem: "",
-        rar: "",
-        labor: "",
-        critical: "",
-        disaction: "",
-        hinderwork: "",
-        parttime: ""
+        issick: "0",
+        poc: "0",
+        pbehaivor: "0",
+        whsystem: "1",
+        rar: "1",
+        labor: "0",
+        critical: "0",
+        disaction: "0",
+        hinderwork: "0",
+        parttime: "0"
       },
       issick: [{ validate: val => !!val, message: "该项必选" }],
       poc: [{ validate: val => !!val, message: "该项必选" }],
@@ -327,8 +333,12 @@ export default {
     window.scrollTo(0,0)
     for (let dat1 in t.formData) {
       for (let dat2 in t.form) {
-        if (dat1 === dat2) {
-          t.form[dat1] = t.formData[dat1];
+        if (dat2 === 'wstart' ) {
+          t.form[dat2] = t.formData['wstart'];
+        } else if(dat2==='wend') {
+          t.form[dat2] = t.formData['wend'];
+        } else if(dat2==='workplace'){
+          t.form[dat2] = t.formData['workplace'];
         }
       }
     }

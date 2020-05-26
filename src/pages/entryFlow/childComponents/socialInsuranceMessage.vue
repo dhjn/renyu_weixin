@@ -14,7 +14,7 @@
           </span>
         </div>
       </div>
-      <div class="message">
+      <!-- <div class="message">
         <div class="messOne">
           <span>是否在本市缴纳过公积金</span>
           <span class="point">*</span>
@@ -25,7 +25,7 @@
             </mu-form-item>
           </span>
         </div>
-      </div>
+      </div> -->
       <div class="message">
         <div class="messOne">
           <span>是否有医保存折</span>

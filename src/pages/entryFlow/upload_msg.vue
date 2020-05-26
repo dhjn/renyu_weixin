@@ -79,7 +79,7 @@
     </div>
     <div class="sub_fotter">
       <button @click="acceptOfferOne">上一步</button>
-      <button @click="submitEntryFlow">完成入职</button>
+      <button @click="submitEntryFlow">完成个人信息填写</button>
     </div>
     <div class="upload_mask" v-show="uploadMaskShow">
       <img :src="uploadMaskSrc" alt="" class="upload_mask_img1" />
@@ -95,7 +95,7 @@
 <script>
 import { filterPicture } from "@/lib/util";
 import valid from "@/lib/pub_valid";
-import { Toast } from "mint-ui";
+import { Toast, MessageBox } from "mint-ui";
 export default {
   name: "uploadMsg",
   data() {
@@ -105,46 +105,66 @@ export default {
       uploadFileImage: {
         "6135": [],
         "6132": [],
+        "6153": [],
         "6133": [],
+        "6152": [],
         "6149": [],
-        "6150": [],
+        "6151": [],
         "6136": []
       },
       uploadList: [
         {
-          title: "彩色白底证件照片1寸照片四张",
+          title: "1寸彩色证件照片或本人自拍(必传)",
           iconImg: require("../../../static/entryFlow/entry_18.png"),
           rename: "彩色照片",
           id: 6135
         },
         {
-          title: "身份证复印件正反面在一张纸上",
+          title: "身份证正面照片(必传)",
           iconImg: require("../../../static/entryFlow/entry_18.png"),
-          rename: "身份证",
+          rename: "身份证正面",
           id: 6132
         },
         {
-          title: "户口本户主页及本人页在一张纸上",
+          title: "身份证反面照片(必传)",
           iconImg: require("../../../static/entryFlow/entry_18.png"),
-          rename: "户口本",
+          rename: "身份证反面",
+          id: 6153
+        },
+        {
+          title: "户口本首页照片(有公安局盖章页)",
+          iconImg: require("../../../static/entryFlow/entry_18.png"),
+          rename: "户口本照片主页",
           id: 6133
         },
         {
-          title: "健康证-验明原件留复印件一份,并填表",
+          title: "户口本本人页照片",
           iconImg: require("../../../static/entryFlow/entry_18.png"),
-          rename: "健康证",
+          rename: "户口本照片个人页",
+          id: 6152
+        },
+        {
+          title: "健康证正面照片",
+          iconImg: require("../../../static/entryFlow/entry_18.png"),
+          rename: "健康证照片正面",
           id: 6149
         },
         {
-          title: "与前一家单位劳动关系终止/解除证明信-原件",
+          title: "健康证反面照片",
           iconImg: require("../../../static/entryFlow/entry_18.png"),
-          rename: "劳动关系终止",
-          id: 6150
+          rename: "健康证照片反面",
+          id: 6151
         },
+        // {
+        //   title: "与前一家单位劳动关系终止/解除证明信-原件",
+        //   iconImg: require("../../../static/entryFlow/entry_18.png"),
+        //   rename: "劳动关系终止",
+        //   id: 6150
+        // },
         {
-          title: "招商银行银行卡复印件",
+          title: "银行卡正面照片(有卡号面——必传)",
           iconImg: require("../../../static/entryFlow/entry_18.png"),
-          rename: "招商银行银行卡复印件",
+          rename: "银行卡正面",
           id: 6136
         }
       ],
@@ -247,6 +267,19 @@ export default {
         });
         return;
       }
+      if (
+        t.uploadFileImage["6135"].length === 0 ||
+        t.uploadFileImage["6132"].length === 0 ||
+        t.uploadFileImage["6153"].length === 0 ||
+        t.uploadFileImage["6136"].length === 0
+      ) {
+        Toast({
+          message: "请上传必传项",
+          position: "middle",
+          duration: 2000
+        });
+        return;
+      }
       for (let key in this.uploadFileImage) {
         this.uploadArr.forEach(ele => {
           if (ele.dtid === Number(key)) {
@@ -268,19 +301,18 @@ export default {
         })
         .then(res => {
           if (res.data.errcode == 0) {
-            t.$store.commit("entryFlow/setEntryDataBlock", "01rejectOffer");
-            let obj = {
-              writeMsg: "",
-              uploadMsg: ""
-            };
-            t.$store.commit("entryFlow/setOfferListShow", obj);
+            // //跳转到首页
+            // t.$store.commit("entryFlow/setEntryDataBlock", "01rejectOffer");
+            // let obj = {
+            //   writeMsg: "",
+            //   uploadMsg: ""
+            // };
+            // t.$store.commit("entryFlow/setOfferListShow", obj);
+            t.isloading = false;
+            MessageBox.alert("您的个人信息填写已完成").then(action => {
+              t.$router.push({ path: "/" });
+            });
           }
-          t.isloading = false;
-          Toast({
-            message: res.data.msg,
-            position: "middle",
-            duration: 2000
-          });
         })
         .catch(err => {
           console.log(err);
@@ -289,6 +321,7 @@ export default {
     getUploadParams() {
       this.uploadArr = [];
       let data = JSON.parse(localStorage.getItem("formData"));
+      debugger
       data.upload.forEach(item => {
         this.uploadList.forEach(ele => {
           if (ele.id === item.dtid) {
@@ -336,15 +369,15 @@ export default {
   },
   mounted() {
     const t = this;
-    document.body.style.overflow= "scroll";
+    document.body.style.overflow = "scroll";
     t.getUploadParams();
-    var file = document.getElementsByClassName('file')
+    var file = document.getElementsByClassName("file");
     var brand = this.judgeBrand(navigator.userAgent.toLowerCase()); // 获取手机类型
-    if (brand!=='huawei') {
-      let files = Array.from(file)
-      files.forEach(item=>{
+    if (brand !== "huawei") {
+      let files = Array.from(file);
+      files.forEach(item => {
         item.removeAttribute("capture");
-      })
+      });
     }
   },
   created() {},
@@ -362,8 +395,7 @@ export default {
   width: 100%;
   // height: calc(100% - 320px);
   position: absolute;
-  top: 18%;
-  z-index: 1000;
+  top: 320px;
   overflow-y: scroll;
   // background: rgba(244, 246, 250, 1);
   background: white;

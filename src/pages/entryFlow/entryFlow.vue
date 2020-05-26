@@ -6,13 +6,13 @@
         <h3 id="h3">{{flowTitle}}</h3>
         <div class="phone">
           <div>
-            <img src="../../../static/entryFlow/entry_3.png" alt="">
+            <img src="../../../static/entryFlow/zh.png" alt="">
           </div>
           <div><input type="number" placeholder="手机号" v-model="formMain.gzhMobile" pattern="\d*"></div>
         </div>
         <div class="phone">
           <div>
-            <img src="../../../static/entryFlow/entry_2.png" alt="">
+            <img src="../../../static/entryFlow/mm.png" alt="">
           </div>
           <div><input type="password" placeholder="密码" v-model="formMain.pwd"  pattern="\d*"></div>
         </div>
@@ -58,9 +58,15 @@
               localStorage.setItem('isLogin',true)
               localStorage.setItem('token',res.data.data.Token)
               localStorage.setItem('userId',res.data.data.userId)
+              localStorage.setItem('isEditted',res.data.data.isEditted)
               JsCookie.set('token',res.data.data.Token)
               JsCookie.set('userId',res.data.data.userId)
-              t.getData()
+              let flag = JSON.parse(localStorage.getItem('isEditted'))
+              if(!flag){
+                 t.$router.push({path:'/over'})
+              } else {
+                t.getData()
+              }
             } else {
               Toast({
                 message: res.data.msg,
@@ -106,21 +112,21 @@
   .entryFlow{
     width:100%;
     height: 100%;
-    background-image: url("../../../static/entryFlow/entry_1.png");
+    background-image: url("../../../static/entryFlow/login.png");
     background-repeat: no-repeat;
-    background-size: 100% 100%;
+    background-size: 100% 480px;
     position: relative;
     .submit{
       width:90%;
-      height: 600px;
       background: white;
       position: absolute;
-      top:270px;
+      top:385px;
       left: 5%;
       border-radius: 20px;
       box-shadow: 0px 2px 2px #f6f6f6;
       padding-top: 100px;
       box-sizing: border-box;
+      box-shadow: 0px 0px 10px 0.5px rgba(0,10,0,0.1);
       h3{
         width:100%;
         text-align: center;
@@ -140,7 +146,7 @@
           margin-right: 20px;
           img{
             width:30px;
-            height: 50px;
+            height: 36px;
           }
         }
         div:nth-of-type(2) {

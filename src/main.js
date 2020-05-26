@@ -64,6 +64,28 @@ Date.prototype.format = function(fmt) {
   }
   return fmt;
 };
+axios.interceptors.request.use(function (config) {
+  let pubilcUrl = pubsource.pub_getlink
+  let index = config.url.search('/api')
+  let str = config.url.slice(index+4)
+  config.url = pubilcUrl + str
+  return config;
+}, function (error) {
+  return Promise.reject(error);
+});
+router.beforeEach((to, from, next) => {
+  const TOKEN = localStorage.getItem("token");
+  if (!TOKEN) {
+    // 未登录状态
+    if(to.name=='entryFlow'){
+      next();
+    }else{
+      next( { path: "/entryFlow" } );
+    }
+  } else {
+    next()
+  }
+});
 
 /* eslint-disable no-new */
 new Vue({
@@ -76,22 +98,5 @@ new Vue({
   template: "<App/>"
 });
 
-axios.interceptors.request.use(function (config) {
-  let pubilcUrl = pubsource.pub_getlink
-  let index = config.url.search('/api')
-  let str = config.url.slice(index+4)
-  config.url = pubilcUrl + str
-  return config;
-}, function (error) {
-  return Promise.reject(error);
-});
 
-router.beforeEach((to, from, next) => {
-  const TOKEN = localStorage.getItem("token");
-  if (!TOKEN) {
-    // 未登录状态
-    next( { path: "/entryFlow" } );
-  } else {
-    next();
-  }
-});
+
