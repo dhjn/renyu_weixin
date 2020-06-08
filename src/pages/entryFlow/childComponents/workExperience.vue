@@ -55,6 +55,7 @@
             <mu-form-item prop="workplace">
               <mu-text-field
                 v-model="form.workplace"
+                max-length="16"
                 placeholder="请填写"
               ></mu-text-field>
             </mu-form-item>
@@ -398,9 +399,6 @@ export default {
   },
   computed: {
     formData() {
-      if (Object.keys(this.$store.state.entryFlow.formData).length == 0) {
-        this.$store.dispatch("entryFlow/getFormData");
-      }
       return this.$store.state.entryFlow.formData;
     }
   }
@@ -417,6 +415,9 @@ export default {
   height: 100%;
   line-height: 2;
   font-size: inherit;
+}
+/deep/ .mu-input-help {
+  display: none;
 }
 /deep/ .mu-form{
   position: relative;

@@ -19,7 +19,7 @@
         <div class="messOne">
           <span>身份证号码</span>
           <span>
-            <mu-form-item prop="identity">
+            <mu-form-item prop="identity" :rules="identity">
               <mu-text-field
                 placeholder="请填写"
                 v-model="form.identity"
@@ -33,7 +33,7 @@
           <span>最高学历</span>
           <span class="point">*</span>
           <span>
-            <mu-form-item prop="education" :rules="education"> 
+            <mu-form-item prop="education" :rules="education">
               <mu-text-field
                 placeholder="请选择"
                 readonly="readonly"
@@ -44,7 +44,7 @@
           </span>
         </div>
       </div>
-       <div class="message">
+      <div class="message">
         <div class="messOne">
           <span>所学专业</span>
           <span>
@@ -120,6 +120,7 @@
             <mu-form-item prop="graduation">
               <mu-text-field
                 placeholder="请填写"
+                max-length="16"
                 v-model="form.graduation"
               ></mu-text-field>
             </mu-form-item>
@@ -174,13 +175,19 @@ export default {
         name: "",
         identity: "",
         education: "",
-        major:'',
-        prove:'',
-        proPhone:'',
+        major: "",
+        prove: "",
+        proPhone: "",
         gstart: "",
         gend: "",
         graduation: ""
       },
+      identity: [
+        {
+          validate: val => this.val_IdCard(this.form.identity),
+          message: "身份证格式有误"
+        }
+      ],
       gstart: [
         {
           validate: val => this.judgeDate(this.form.gstart, this.form.gend),
@@ -256,18 +263,30 @@ export default {
         }
       });
     },
-     //手机格式 204 必须以数字开头，除数字外，可含有-
+    //手机格式 204 必须以数字开头，除数字外，可含有-
     val_mobile(str) {
       let rtn = false;
       if (str === "") {
         rtn = true;
       } else {
-        let reg = /^[1][3,4,5,7,8][0-9]{9}$/;
+        let reg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/;
         if (str.match(reg)) {
           rtn = true;
         }
       }
       return rtn;
+    },
+    //身份证号
+    val_IdCard: id => {
+      let REGEX_ID_CARD = /(^\d{15}$)|bai(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+      if (id === "") {
+        return true;
+      } else {
+        if (REGEX_ID_CARD.test(id)) {
+          return true;
+        }
+        return false;
+      }
     },
     gstarts(num) {
       this.typeNum = num;
@@ -353,16 +372,16 @@ export default {
           t.form[dat1] = t.formData[dat1];
         }
       }
-      t.educationOptions.forEach(item=>{
-        if(item.id===this.form.education){
-          this.educationName = item.name
+      t.educationOptions.forEach(item => {
+        if (item.id === this.form.education) {
+          this.educationName = item.name;
         }
-      })
+      });
     }
   },
   computed: {
     formData() {
-      if (Object.keys(this.$store.state.entryFlow.formData).length == 0) {
+       if (Object.keys(this.$store.state.entryFlow.formData).length == 0) {
         this.$store.dispatch("entryFlow/getFormData");
       }
       return this.$store.state.entryFlow.formData;
@@ -381,6 +400,9 @@ export default {
   height: 100%;
   line-height: 2;
   font-size: inherit;
+}
+/deep/ .mu-input-help {
+  display: none;
 }
 /deep/ .mu-form-item {
   padding: 0;

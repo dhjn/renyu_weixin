@@ -42,6 +42,7 @@
             <mu-form-item prop="bankname">
               <mu-text-field
                 placeholder="请填写"
+                max-length="28"
                 v-model="form.bankname"
               ></mu-text-field>
             </mu-form-item>
@@ -56,6 +57,7 @@
             <mu-form-item prop="bcard" :rules="bcard">
               <mu-text-field
                 placeholder="请填写"
+                type="number"
                 v-model="form.bcard"
               ></mu-text-field>
             </mu-form-item>
@@ -212,6 +214,7 @@ export default {
           }
         });
       }
+      this.clear();
       this.pickerShow = false;
     },
     focus(type) {
@@ -343,6 +346,15 @@ export default {
     }
     t.init();
   },
+  watch:{
+    'form.bcard':{
+      handler(val){
+        if(val.length>20){
+          this.form.bcard = val.substring(0,20)
+        }
+      }
+    },
+  },
   computed: {
     formData() {
       if (Object.keys(this.$store.state.entryFlow.formData).length == 0) {
@@ -364,6 +376,9 @@ export default {
   height: 100%;
   line-height: 2;
   font-size: inherit;
+}
+/deep/ .mu-input-help {
+  display: none;
 }
 /deep/ .picker-item {
   font-size: 36px;

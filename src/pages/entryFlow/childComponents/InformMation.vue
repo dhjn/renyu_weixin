@@ -97,6 +97,7 @@
               <mu-text-field
                 placeholder="请填写"
                 v-model="form.hkdf"
+                max-length="40"
               ></mu-text-field>
             </mu-form-item>
           </span>
@@ -110,6 +111,7 @@
               <mu-text-field
                 placeholder="请填写"
                 v-model="form.hkpostcode"
+                type="number"
               ></mu-text-field>
             </mu-form-item>
           </span>
@@ -122,7 +124,7 @@
             <mu-form-item prop="hobbies">
               <mu-text-field
                 placeholder="请填写"
-                max-length="22"
+                max-length="10"
                 v-model="form.hobbies"
               ></mu-text-field>
             </mu-form-item>
@@ -157,6 +159,7 @@
             <mu-form-item prop="effloc" :rules="effloc">
               <mu-text-field
                 placeholder="请填写"
+                max-length="40"
                 v-model="form.effloc"
               ></mu-text-field>
             </mu-form-item>
@@ -170,6 +173,7 @@
             <mu-form-item prop="effpostcode">
               <mu-text-field
                 placeholder="请填写"
+                type="number"
                 v-model="form.effpostcode"
               ></mu-text-field>
             </mu-form-item>
@@ -185,7 +189,7 @@
               <mu-text-field
                 placeholder="请填写"
                 v-model="form.residence"
-                max-length="22"
+                max-length="40"
               ></mu-text-field>
             </mu-form-item>
           </span>
@@ -198,6 +202,7 @@
             <mu-form-item prop="resdpostcode">
               <mu-text-field
                 placeholder="请填写"
+                type="number"
                 v-model="form.resdpostcode"
               ></mu-text-field>
             </mu-form-item>
@@ -255,6 +260,7 @@
             <mu-form-item prop="marremark">
               <mu-text-field
                 placeholder="请填写"
+                max-length="10"
                 v-model="form.marremark"
               ></mu-text-field>
             </mu-form-item>
@@ -323,6 +329,9 @@
             <mu-form-item prop="mpct" :rules="mpct">
               <mu-text-field
                 placeholder="请填写"
+                max-length="16"
+                oninput="value=value.replace(/[\d]/g,'') "
+                onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[\d]/g,''))"
                 v-model="form.mpct"
               ></mu-text-field>
             </mu-form-item>
@@ -336,7 +345,9 @@
           <span>
             <mu-form-item prop="mprelation" :rules="mprelation">
               <mu-text-field
-                placeholder="请填写"
+                placeholder="请选择"
+                readonly="readonly"
+                @focus="focus(8)"
                 v-model="form.mprelation"
               ></mu-text-field>
             </mu-form-item>
@@ -364,6 +375,8 @@
             <mu-form-item prop="ifjkz">
               <mu-text-field
                 placeholder="请填写"
+                oninput="this.value=this.value.replace(/\D/g,'')"
+                onafterpaste="this.value=this.value.replace(/\D/g,'')"
                 v-model="form.ifjkz"
               ></mu-text-field>
             </mu-form-item>
@@ -491,6 +504,14 @@ export default {
       preempstatName: "",
       recordlocOptions: [],
       recordlocName: "",
+      mprelationOptions: [
+        { name: "配偶" },
+        { name: "父母" },
+        { name: "子女" },
+        { name: "兄弟" },
+        { name: "同事" },
+        { name: "好友" }
+      ],
       typeNum: "",
       birthlocName: "",
       value: "0",
@@ -544,7 +565,7 @@ export default {
       mpphone: [
         { validate: val => !!val, message: "紧急联系人电话不能为空" },
         {
-          validate: val => validate.val_phone(this.form.mpphone),
+          validate: val => this.val_mobile(this.form.mpphone),
           message: "紧急联系人电话输入有误"
         }
       ],
@@ -656,6 +677,14 @@ export default {
         }
       });
     },
+    val_mobile(str) {
+      let rtn = false;
+      let reg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/;
+      if (str.match(reg)) {
+        rtn = true;
+      }
+      return rtn;
+    },
     focus(type) {
       const t = this;
       let data = [];
@@ -677,11 +706,14 @@ export default {
       } else if (type === 7) {
         data = t.recordlocOptions;
         t.scrollType = "recordloc";
+      } else if (type === 8) {
+        data = t.mprelationOptions;
+        t.scrollType = "mprelation";
       }
       data.forEach((item, index) => {
         let obj = {
           paramInfoName: item.name,
-          paramCode: item.id
+          paramCode: item.id ? item.id : ""
         };
         t.maps.push(obj);
       });
@@ -719,6 +751,9 @@ export default {
         case "recordloc":
           t.form.recordloc = this.map.paramCode;
           t.recordlocName = this.map.paramInfoName;
+          break;
+        case "mprelation":
+          t.form.mprelation = this.map.paramInfoName;
           break;
       }
       t.maps = [];
@@ -970,6 +1005,34 @@ export default {
     }
   },
   watch: {
+    "form.hkpostcode": {
+      handler(val) {
+        if (val.length > 6) {
+          this.form.hkpostcode = val.substring(0, 6);
+        }
+      }
+    },
+    "form.effpostcode": {
+      handler(val) {
+        if (val.length > 6) {
+          this.form.effpostcode = val.substring(0, 6);
+        }
+      }
+    },
+    "form.resdpostcode": {
+      handler(val) {
+        if (val.length > 6) {
+          this.form.resdpostcode = val.substring(0, 6);
+        }
+      }
+    },
+    "form.ifjkz": {
+      handler(val) {
+        if (val.length > 15) {
+          this.form.ifjkz = val.substring(0, 15);
+        }
+      }
+    },
     pickerShow(val) {
       if (val) {
         this.closeTouch();

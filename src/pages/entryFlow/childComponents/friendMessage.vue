@@ -13,6 +13,7 @@
             <mu-form-item prop="relaName">
               <mu-text-field
                 placeholder="请填写"
+                max-length="16"
                 v-model="form.relaName"
               ></mu-text-field>
             </mu-form-item>
@@ -25,7 +26,9 @@
           <span>
             <mu-form-item prop="relaSay">
               <mu-text-field
-                placeholder="请填写"
+                placeholder="请选择"
+                readonly="readonly"
+                @focus="focus"
                 v-model="form.relaSay"
               ></mu-text-field>
             </mu-form-item>
@@ -39,6 +42,7 @@
             <mu-form-item prop="relaWorkp">
               <mu-text-field
                 placeholder="请填写"
+                max-length="10"
                 v-model="form.relaWorkp"
               ></mu-text-field>
             </mu-form-item>
@@ -52,6 +56,7 @@
             <mu-form-item prop="relaJobTitle">
               <mu-text-field
                 placeholder="请填写"
+                max-length="12"
                 v-model="form.relaJobTitle"
               ></mu-text-field>
             </mu-form-item>
@@ -72,6 +77,15 @@
           </span>
         </div>
       </div>
+      <div class="scrollPicker" v-if="scrollPickerShow">
+        <div class="scrollPickerChild">
+          <div class="selectBtn">
+            <div style="color: #3a72ed;" @click="scrollCancel">取消</div>
+            <div style="color: #3a72ed;" @click="scrollSure">确定</div>
+          </div>
+          <scroll-picker :maps="maps" :map.sync="map"></scroll-picker>
+        </div>
+      </div>
       <div @click="submit" class="submit">
         保存
       </div>
@@ -90,10 +104,18 @@ import {
 import Bus from "../../../lib/bus";
 import { DatetimePicker, Toast } from "mint-ui";
 import moment from "moment"; // 格式化时间
+import scrollPicker from "@/components/scrollPicker";
 export default {
   name: "friendMessage",
   data() {
     return {
+      relaSayOptions:[
+        { name: "配偶" },
+        { name: "亲属" },
+        { name: "子女" },
+        { name: "朋友" },
+        { name: "其他" }
+      ],
       form: {
         relaName: "",
         relaSay: "",
@@ -107,10 +129,15 @@ export default {
           message: "手机号格式有误"
         }
       ],
-      isloading: false
+      isloading: false,
+      scrollPickerShow:false,
+      maps:[],
+      map:{}
     };
   },
-  components: {},
+  components: {
+    scrollPicker
+  },
   methods: {
     clear() {
       this.$refs.form.clear();
@@ -121,12 +148,37 @@ export default {
       if (str === "") {
         rtn = true;
       } else {
-        let reg = /^[1][3,4,5,7,8][0-9]{9}$/;
+        let reg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/;
         if (str.match(reg)) {
           rtn = true;
         }
       }
       return rtn;
+    },
+    focus() {
+      const t = this;
+      let data = [];
+      data = t.relaSayOptions;
+      data.forEach((item, index) => {
+        let obj = {
+          paramInfoName: item.name,
+          paramCode: item.id ? item.id : ""
+        };
+        t.maps.push(obj);
+      });
+      t.map = t.maps[0];
+      t.scrollPickerShow = true;
+    },
+    scrollCancel() {
+      this.maps = [];
+      this.scrollPickerShow = false;
+    },
+    scrollSure() {
+      const t = this;
+      t.scrollPickerShow = false;
+      t.form.relaSay = this.map.paramInfoName;
+      t.maps = [];
+      t.clear();
     },
     submit() {
       const t = this;
@@ -190,6 +242,9 @@ export default {
   },
   computed: {
     formData() {
+      if (Object.keys(this.$store.state.entryFlow.formData).length == 0) {
+        this.$store.dispatch("entryFlow/getFormData");
+      }
       return this.$store.state.entryFlow.formData;
     },
     friendInfoShow() {
@@ -209,6 +264,9 @@ export default {
   height: 100%;
   line-height: 2;
   font-size: inherit;
+}
+/deep/ .mu-input-help {
+  display: none;
 }
 /deep/ .mu-form-item {
   padding: 0;

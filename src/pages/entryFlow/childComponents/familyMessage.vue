@@ -10,6 +10,7 @@
             <mu-form-item prop="familyName" :rules="familyName">
               <mu-text-field
                 placeholder="请填写"
+                max-length="16"
                 v-model="form.familyName"
               ></mu-text-field>
             </mu-form-item>
@@ -23,7 +24,9 @@
           <span>
             <mu-form-item prop="familySay" :rules="familySay">
               <mu-text-field
-                placeholder="请填写"
+                placeholder="请选择"
+                readonly="readonly"
+                @focus="focus"
                 v-model="form.familySay"
               ></mu-text-field>
             </mu-form-item>
@@ -51,6 +54,7 @@
             <mu-form-item prop="familyworkPlace">
               <mu-text-field
                 placeholder="请填写"
+                max-length="16"
                 v-model="form.familyworkPlace"
               ></mu-text-field>
             </mu-form-item>
@@ -64,6 +68,7 @@
             <mu-form-item prop="familyJobTitle">
               <mu-text-field
                 placeholder="请填写"
+                max-length="12"
                 v-model="form.familyJobTitle"
               ></mu-text-field>
             </mu-form-item>
@@ -85,6 +90,15 @@
           </span>
         </div>
       </div>
+      <div class="scrollPicker" v-if="scrollPickerShow">
+        <div class="scrollPickerChild">
+          <div class="selectBtn">
+            <div style="color: #3a72ed;" @click="scrollCancel">取消</div>
+            <div style="color: #3a72ed;" @click="scrollSure">确定</div>
+          </div>
+          <scroll-picker :maps="maps" :map.sync="map"></scroll-picker>
+        </div>
+      </div>
       <div @click="submit" class="submit">
         保存
       </div>
@@ -103,11 +117,19 @@ import {
 import Bus from "../../../lib/bus";
 import { DatetimePicker, Toast } from "mint-ui";
 import moment from "moment"; // 格式化时间
+import scrollPicker from "@/components/scrollPicker";
 import nationData from "./js/data";
 export default {
   name: "familyMessage",
   data() {
     return {
+      familySayOptions: [
+        { name: "配偶" },
+        { name: "亲属" },
+        { name: "子女" },
+        { name: "朋友" },
+        { name: "其他" }
+      ],
       form: {
         familyName: "",
         familySay: "",
@@ -125,10 +147,15 @@ export default {
           message: "手机号格式有误"
         }
       ],
+      scrollPickerShow:false,
+      maps:[],
+      map:{},
       isloading: false
     };
   },
-  components: {},
+  components: {
+    scrollPicker
+  },
   methods: {
     clear() {
       this.$refs.form.clear();
@@ -136,11 +163,36 @@ export default {
     //手机格式 204 必须以数字开头，除数字外，可含有-
     val_mobile(str) {
       let rtn = false;
-      let reg = /^[1][3,4,5,7,8][0-9]{9}$/;
+      let reg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/;
       if (str.match(reg)) {
         rtn = true;
       }
       return rtn;
+    },
+    focus() {
+      const t = this;
+      let data = [];
+      data = t.familySayOptions;
+      data.forEach((item, index) => {
+        let obj = {
+          paramInfoName: item.name,
+          paramCode: item.id ? item.id : ""
+        };
+        t.maps.push(obj);
+      });
+      t.map = t.maps[0];
+      t.scrollPickerShow = true;
+    },
+    scrollCancel() {
+      this.maps = [];
+      this.scrollPickerShow = false;
+    },
+    scrollSure() {
+      const t = this;
+      t.scrollPickerShow = false;
+      t.form.familySay = this.map.paramInfoName;
+      t.maps = [];
+      t.clear();
     },
     submit() {
       const t = this;
@@ -191,18 +243,28 @@ export default {
   },
   mounted() {
     const t = this;
-    if (t.familyInfoShow) {
-      for (let dat1 in t.formData) {
-        for (let dat2 in t.form) {
-          if (dat1 === dat2) {
-            t.form[dat1] = t.formData[dat1];
-          }
+    for (let dat1 in t.formData) {
+      for (let dat2 in t.form) {
+        if (dat1 === dat2) {
+          t.form[dat1] = t.formData[dat1];
         }
       }
     }
   },
+  watch:{
+    "form.familyAge": {
+      handler(val) {
+        if (val.length > 3) {
+          this.form.familyAge = val.substring(0, 3);
+        }
+      }
+    },
+  },
   computed: {
     formData() {
+       if (Object.keys(this.$store.state.entryFlow.formData).length == 0) {
+        this.$store.dispatch("entryFlow/getFormData");
+      }
       return this.$store.state.entryFlow.formData;
     },
     familyInfoShow() {
@@ -222,6 +284,9 @@ export default {
   height: 100%;
   line-height: 2;
   font-size: inherit;
+}
+/deep/ .mu-input-help {
+  display: none;
 }
 /deep/ .mu-form-item {
   padding: 0;

@@ -309,9 +309,6 @@ export default {
     familyInfoShow() {
       return this.$store.state.entryFlow.infoMsgShow.familyInfo;
     },
-    // socialInsranceInfoShow() {
-    //   return this.$store.state.entryFlow.infoMsgShow.socialInsranceInfo;
-    // },
     eductionInfoShow() {
       return this.$store.state.entryFlow.infoMsgShow.eductionInfo;
     },

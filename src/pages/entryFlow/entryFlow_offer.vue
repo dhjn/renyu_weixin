@@ -124,55 +124,55 @@ export default {
     const t = this;
     let data = this.formData;
     // 个人信息
-    if (data.hasOwnProperty("nation")) {
-      if (data.nation === "") {
-        t.$store.commit("entryFlow/SetUserInfo", false);
-      } else {
-        t.$store.commit("entryFlow/SetUserInfo", true);
-      }
-    } else {
-      t.$store.commit("entryFlow/SetUserInfo", false);
-    }
-    // //  社保信息
-    // if (data.hasOwnProperty("ispaysb")) {
-    //   if (data.ispaysb === "") {
-    //     t.$store.commit("entryFlow/SetSocialInsranceInfo", false);
+    // if (data.hasOwnProperty("nation")) {
+    //   if (data.nation === "") {
+    //     t.$store.commit("entryFlow/SetUserInfo", false);
     //   } else {
-    //     t.$store.commit("entryFlow/SetSocialInsranceInfo", true);
+    //     t.$store.commit("entryFlow/SetUserInfo", true);
     //   }
     // } else {
-    //   t.$store.commit("entryFlow/SetSocialInsranceInfo", false);
+    //   t.$store.commit("entryFlow/SetUserInfo", false);
     // }
-    //  教育信息
-    if (data.hasOwnProperty("graduation")) {
-      if (data.graduation === "") {
-        t.$store.commit("entryFlow/SetEductionInfo", false);
-      } else {
-        t.$store.commit("entryFlow/SetEductionInfo", true);
-      }
-    } else {
-      t.$store.commit("entryFlow/SetEductionInfo", false);
-    }
-    //  工资卡信息
-    if (data.hasOwnProperty("bcardcity")) {
-      if (data.bankzh === 0) {
-        t.$store.commit("entryFlow/SetSalaryInfo", false);
-      } else {
-        t.$store.commit("entryFlow/SetSalaryInfo", true);
-      }
-    } else {
-      t.$store.commit("entryFlow/SetSalaryInfo", false);
-    }
-    // 工作信息
-    if (data.hasOwnProperty("wstart")) {
-      if (data.wstart === "") {
-        t.$store.commit("entryFlow/SetWorkInfo", false);
-      } else {
-        t.$store.commit("entryFlow/SetWorkInfo", true);
-      }
-    } else {
-      t.$store.commit("entryFlow/SetWorkInfo", false);
-    }
+    // // 家庭信息
+    // if (data.hasOwnProperty("familyName")) {
+    //   if (data.familyName === "") {
+    //     t.$store.commit("entryFlow/SetFamilyInfo", false);
+    //   } else {
+    //     t.$store.commit("entryFlow/SetFamilyInfo", true);
+    //   }
+    // } else {
+    //   t.$store.commit("entryFlow/SetFamilyInfo", false);
+    // }
+    // //  教育信息
+    // if (data.hasOwnProperty("education")) {
+    //   if (data.education === "") {
+    //     t.$store.commit("entryFlow/SetEductionInfo", false);
+    //   } else {
+    //     t.$store.commit("entryFlow/SetEductionInfo", true);
+    //   }
+    // } else {
+    //   t.$store.commit("entryFlow/SetEductionInfo", false);
+    // }
+    // //  工资卡信息
+    // if (data.hasOwnProperty("bcardcity")) {
+    //   if (data.bankzh === 0) {
+    //     t.$store.commit("entryFlow/SetSalaryInfo", false);
+    //   } else {
+    //     t.$store.commit("entryFlow/SetSalaryInfo", true);
+    //   }
+    // } else {
+    //   t.$store.commit("entryFlow/SetSalaryInfo", false);
+    // }
+    // // 工作信息
+    // if (data.hasOwnProperty("wstart")) {
+    //   if (data.wstart === "") {
+    //     t.$store.commit("entryFlow/SetWorkInfo", false);
+    //   } else {
+    //     t.$store.commit("entryFlow/SetWorkInfo", true);
+    //   }
+    // } else {
+    //   t.$store.commit("entryFlow/SetWorkInfo", false);
+    // }
   },
   methods: {
     acceptOfferOne() {
@@ -213,14 +213,14 @@ export default {
         });
         return false;
       }
-      // if (t.socialInsranceInfoShow !== true) {
-      //   Toast({
-      //     message: "请完善社保信息才能走下一步",
-      //     position: "middle",
-      //     duration: 2000
-      //   });
-      //   return false;
-      // }
+      if (t.familyInfoShow !== true) {
+        Toast({
+          message: "请完善家庭信息才能走下一步",
+          position: "middle",
+          duration: 2000
+        });
+        return false;
+      }
       if (t.eductionInfoShow !== true) {
         Toast({
           message: "请完善最高学历信息才能走下一步",
@@ -287,8 +287,8 @@ export default {
     userInfoShow() {
       return this.$store.state.entryFlow.infoMsgShow.userInfo;
     },
-    socialInsranceInfoShow() {
-      return this.$store.state.entryFlow.infoMsgShow.socialInsranceInfo;
+    familyInfoShow() {
+      return this.$store.state.entryFlow.infoMsgShow.familyInfo;
     },
     eductionInfoShow() {
       return this.$store.state.entryFlow.infoMsgShow.eductionInfo;

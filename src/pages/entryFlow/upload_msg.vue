@@ -295,6 +295,8 @@ export default {
       // }
       t.isloading = true;
       let headers = { "content-Type": "multipart/form-data" };
+      this.http.defaults.headers.common["token"] = localStorage.getItem('token');
+      this.http.defaults.headers.common["userId"] = localStorage.getItem('userId');
       this.http
         .post("/api/filesupload", formData, {
           headers: headers
@@ -321,7 +323,6 @@ export default {
     getUploadParams() {
       this.uploadArr = [];
       let data = JSON.parse(localStorage.getItem("formData"));
-      debugger
       data.upload.forEach(item => {
         this.uploadList.forEach(ele => {
           if (ele.id === item.dtid) {
