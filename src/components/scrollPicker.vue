@@ -186,7 +186,8 @@
     border-bottom: 1px solid #d3d3d3;
     text-align: center;
     backface-visibility: hidden;
-    color: #a4a4a4;
+    color: #707274;
+    font-size: .64rem;
   }
   .divide-bar-item.active {
     color: #3a72ed;

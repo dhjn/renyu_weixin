@@ -43,6 +43,7 @@
               <mu-text-field
                 placeholder="请填写"
                 max-length="28"
+                oninput="this.value=this.value.replace(/[\d]/g,'');"
                 v-model="form.bankname"
               ></mu-text-field>
             </mu-form-item>
@@ -376,6 +377,12 @@ export default {
   height: 100%;
   line-height: 2;
   font-size: inherit;
+}
+/deep/ .picker-item{
+  font-size: .64rem !important;
+}
+/deep/ .picker-item.picker-selected{
+  color: #3a72ed;
 }
 /deep/ .mu-input-help {
   display: none;

@@ -1,11 +1,7 @@
 <!--一条为一行-->
 <template>
   <div class="messageAll" v-loading="isloading">
-    <mu-form
-      ref="form"
-      :model="form"
-      class="mu-demo-form"
-    >
+    <mu-form ref="form" :model="form" class="mu-demo-form">
       <div class="message">
         <div class="messOne">
           <span>姓名</span>
@@ -14,6 +10,7 @@
               <mu-text-field
                 placeholder="请填写"
                 max-length="16"
+                oninput="this.value=this.value.replace(/[\d]/g,'');"
                 v-model="form.relaName"
               ></mu-text-field>
             </mu-form-item>
@@ -43,6 +40,7 @@
               <mu-text-field
                 placeholder="请填写"
                 max-length="10"
+                oninput="this.value=this.value.replace(/[\d]/g,'');"
                 v-model="form.relaWorkp"
               ></mu-text-field>
             </mu-form-item>
@@ -57,6 +55,7 @@
               <mu-text-field
                 placeholder="请填写"
                 max-length="12"
+                oninput="this.value=this.value.replace(/[\d]/g,'');"
                 v-model="form.relaJobTitle"
               ></mu-text-field>
             </mu-form-item>
@@ -109,7 +108,7 @@ export default {
   name: "friendMessage",
   data() {
     return {
-      relaSayOptions:[
+      relaSayOptions: [
         { name: "配偶" },
         { name: "亲属" },
         { name: "子女" },
@@ -130,9 +129,9 @@ export default {
         }
       ],
       isloading: false,
-      scrollPickerShow:false,
-      maps:[],
-      map:{}
+      scrollPickerShow: false,
+      maps: [],
+      map: {}
     };
   },
   components: {
@@ -230,12 +229,10 @@ export default {
   },
   mounted() {
     const t = this;
-    if (t.friendInfoShow) {
-      for (let dat1 in t.formData) {
-        for (let dat2 in t.form) {
-          if (dat1 === dat2) {
-            t.form[dat1] = t.formData[dat1];
-          }
+    for (let dat1 in t.formData) {
+      for (let dat2 in t.form) {
+        if (dat1 === dat2) {
+          t.form[dat1] = t.formData[dat1];
         }
       }
     }
@@ -246,9 +243,6 @@ export default {
         this.$store.dispatch("entryFlow/getFormData");
       }
       return this.$store.state.entryFlow.formData;
-    },
-    friendInfoShow() {
-      return this.$store.state.entryFlow.infoMsgShow.friendInfo;
     }
   }
 };

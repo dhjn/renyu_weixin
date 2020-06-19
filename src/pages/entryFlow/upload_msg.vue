@@ -110,7 +110,11 @@ export default {
         "6152": [],
         "6149": [],
         "6151": [],
-        "6136": []
+        "6136": [],
+        "6156": [],
+        "6157": [],
+        "6155": [],
+        "6154": [],
       },
       uploadList: [
         {
@@ -166,10 +170,35 @@ export default {
           iconImg: require("../../../static/entryFlow/entry_18.png"),
           rename: "银行卡正面",
           id: 6136
+        },
+        {
+          title: "结婚证正面照片",
+          iconImg: require("../../../static/entryFlow/entry_18.png"),
+          rename: "结婚证正面",
+          id: 6156
+        },
+        {
+          title: "退休证正面照片",
+          iconImg: require("../../../static/entryFlow/entry_18.png"),
+          rename: "退休证正面",
+          id: 6157
+        },
+        {
+          title: "学历证明",
+          iconImg: require("../../../static/entryFlow/entry_18.png"),
+          rename: "学历证明",
+          id: 6155
+        },
+        {
+          title: "40岁以上社保缴纳明细",
+          iconImg: require("../../../static/entryFlow/entry_18.png"),
+          rename: "40岁以上社保缴纳明细",
+          id: 6154
         }
       ],
       uploadMaskSrc: "",
-      isloading: false
+      isloading: false,
+      formData: {}
     };
   },
   components: {},
@@ -230,7 +259,79 @@ export default {
         file: file,
         id: id
       };
-      t.uploadFileImage[id].push(fileNameKey);
+      t.imgResize(fileNameKey,id,t.callback)
+    },
+    imgResize(fileObj,id,callback) {
+      var t = this;
+      var fileReader = new FileReader();
+      fileReader.readAsDataURL(fileObj.file);
+      fileReader.onload = function() {
+        var IMG = new Image();
+        IMG.src = this.result;
+        IMG.onload = function() {
+          var w = this.naturalWidth,
+            h = this.naturalHeight,
+            resizeW = 0,
+            resizeH = 0;
+          // maxSize 是压缩的设置，设置图片的最大宽度和最大高度，等比缩放，level是报错的质量，数值越小质量越低
+          var maxSize = {
+            width: 500,
+            height: 500,
+            level: 0.5
+          };
+          if (w > maxSize.width || h > maxSize.height) {
+            var multiple = Math.max(w / maxSize.width, h / maxSize.height);
+            resizeW = w / multiple;
+            resizeH = h / multiple;
+          } else {
+            return callback(this.src, fileObj,id);
+          }
+          var canvas = document.createElement("canvas"),
+            ctx = canvas.getContext("2d");
+          // if (window.navigator.userAgent.indexOf("iPhone") > 0) {
+          //   canvas.width = resizeW;
+          //   canvas.height = resizeH;
+          //   ctx.rotate((90 * Math.PI) / 180);
+          //   ctx.drawImage(IMG, 0, -resizeH, resizeW, resizeH);
+          // } else {
+            canvas.width = resizeW;
+            canvas.height = resizeH;
+            ctx.drawImage(IMG, 0, 0, resizeW, resizeH);
+          // }
+          var base64 = canvas.toDataURL("image/png",maxSize.level);
+          // var str = encodeURIComponent(base64.split(",")[1])
+          // t.convertBlob(decodeURIComponent(window.atob(str)), fileObj,id,callback);
+          callback(base64, fileObj,id);
+        };
+      };
+    },
+    convertBlob(base64, fileObj,id,callback) {
+      var buffer = new ArrayBuffer(base64.length);
+      var ubuffer = new Uint8Array(buffer);
+      for (var i = 0; i < base64.length; i++) {
+        ubuffer[i] = base64.charCodeAt(i);
+      }
+      var blob;
+      try {
+        blob = new Blob([buffer], { type: "image/jpg" });
+      } catch (e) {
+        window.BlobBuilder =
+          window.BlobBuilder ||
+          window.WebKitBlobBuilder ||
+          window.MozBlobBuilder ||
+          window.MSBlobBuilder;
+        if (e.name === "TypeError" && window.BlobBuilder) {
+          var blobBuilder = new BlobBuilder();
+          blobBuilder.append(buffer);
+          blob = blobBuilder.getBlob("image/jpg");
+        }
+      }
+      callback(blob, fileObj,id);
+    },
+    callback(fileResize, fileObj,id) {
+      fileObj.file = fileResize
+      console.log(fileResize)
+      this.uploadFileImage[id].push(fileObj);
     },
     /**
      * 下载文件
@@ -258,7 +359,7 @@ export default {
     },
     submitEntryFlow() {
       const t = this;
-      let formData = new FormData();
+      t.formData = new FormData();
       if (this.uploadArr.length === 0) {
         Toast({
           message: "该流程已过",
@@ -283,33 +384,30 @@ export default {
       for (let key in this.uploadFileImage) {
         this.uploadArr.forEach(ele => {
           if (ele.dtid === Number(key)) {
-            formData.append("type", JSON.stringify(ele));
+            t.formData.append("type", JSON.stringify(ele));
             this.uploadFileImage[key].forEach((item, index) => {
-              formData.append(item.id, item.file);
+              this.formData.append(item.id, item.file);
             });
           }
         });
       }
-      // for (var value of formData.values()) {
-      //   console.log(value);
-      // }
+      for (var value of this.formData.values()) {
+        console.log(value);
+      }
       t.isloading = true;
       let headers = { "content-Type": "multipart/form-data" };
-      this.http.defaults.headers.common["token"] = localStorage.getItem('token');
-      this.http.defaults.headers.common["userId"] = localStorage.getItem('userId');
+      this.http.defaults.headers.common["token"] = localStorage.getItem(
+        "token"
+      );
+      this.http.defaults.headers.common["userId"] = localStorage.getItem(
+        "userId"
+      );
       this.http
-        .post("/api/filesupload", formData, {
+        .post("/api/filesupload", t.formData, {
           headers: headers
         })
         .then(res => {
           if (res.data.errcode == 0) {
-            // //跳转到首页
-            // t.$store.commit("entryFlow/setEntryDataBlock", "01rejectOffer");
-            // let obj = {
-            //   writeMsg: "",
-            //   uploadMsg: ""
-            // };
-            // t.$store.commit("entryFlow/setOfferListShow", obj);
             t.isloading = false;
             MessageBox.alert("您的个人信息填写已完成").then(action => {
               t.$router.push({ path: "/" });
@@ -391,6 +489,9 @@ export default {
 }
 /deep/ .mu-flat-button .mu-button-wrapper {
   font-size: 14px !important;
+}
+/deep/ .mu-loading-wrap {
+  position: fixed;
 }
 .upload_msg {
   width: 100%;

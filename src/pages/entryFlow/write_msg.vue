@@ -264,17 +264,9 @@ export default {
         });
         return false;
       }
-      // if (t.socialInsranceInfoShow !== true) {
-      //   Toast({
-      //     message: "请完善社保信息才能走下一步",
-      //     position: "middle",
-      //     duration: 2000
-      //   });
-      //   return false;
-      // }
-      if (t.eductionInfoShow !== true) {
+      if (t.familyInfoShow !== true) {
         Toast({
-          message: "请完善学历信息才能走下一步",
+          message: "请完善家庭信息才能走下一步",
           position: "middle",
           duration: 2000
         });
@@ -283,6 +275,14 @@ export default {
       if (t.salaryInfoShow !== true) {
         Toast({
           message: "请完善工资卡信息才能走下一步",
+          position: "middle",
+          duration: 2000
+        });
+        return false;
+      }
+      if (t.eductionInfoShow !== true) {
+        Toast({
+          message: "请完善最高学历信息才能走下一步",
           position: "middle",
           duration: 2000
         });
@@ -303,22 +303,40 @@ export default {
     document.body.style.overflow = "scroll";
   },
   computed: {
-    userInfoShow() {
+     userInfoShow() {
+      if(localStorage.getItem('userInfo')){
+        this.$store.commit('entryFlow/SetUserInfo',JSON.parse(localStorage.getItem('userInfo')))
+      }
       return this.$store.state.entryFlow.infoMsgShow.userInfo;
     },
     familyInfoShow() {
+      if(localStorage.getItem('familyInfo')){
+        this.$store.commit('entryFlow/SetFamilyInfo',JSON.parse(localStorage.getItem('familyInfo')))
+      }
       return this.$store.state.entryFlow.infoMsgShow.familyInfo;
     },
     eductionInfoShow() {
+      if(localStorage.getItem('eductionInfo')){
+        this.$store.commit('entryFlow/SetEductionInfo',JSON.parse(localStorage.getItem('eductionInfo')))
+      }
       return this.$store.state.entryFlow.infoMsgShow.eductionInfo;
     },
     salaryInfoShow() {
+      if(localStorage.getItem('salaryInfo')){
+        this.$store.commit('entryFlow/SetSalaryInfo',JSON.parse(localStorage.getItem('salaryInfo')))
+      }
       return this.$store.state.entryFlow.infoMsgShow.salaryInfo;
     },
     workInfoShow() {
+      if(localStorage.getItem('workInfo')){
+        this.$store.commit('entryFlow/SetWorkInfo',JSON.parse(localStorage.getItem('workInfo')))
+      }
       return this.$store.state.entryFlow.infoMsgShow.workInfo;
     },
     friendInfoShow() {
+      if(localStorage.getItem('friendInfo')){
+        this.$store.commit('entryFlow/SetFriendInfo',JSON.parse(localStorage.getItem('friendInfo')))
+      }
       return this.$store.state.entryFlow.infoMsgShow.friendInfo;
     },
   }

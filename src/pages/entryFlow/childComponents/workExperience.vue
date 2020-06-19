@@ -56,6 +56,7 @@
               <mu-text-field
                 v-model="form.workplace"
                 max-length="16"
+                oninput="this.value=this.value.replace(/[\d]/g,'');"
                 placeholder="请填写"
               ></mu-text-field>
             </mu-form-item>
@@ -70,6 +71,7 @@
               <mu-text-field
                 v-model="form.content"
                 placeholder="请填写"
+                oninput="this.value=this.value.replace(/[\d]/g,'');"
               ></mu-text-field>
             </mu-form-item>
           </span>
@@ -82,6 +84,7 @@
             <mu-form-item prop="reason">
               <mu-text-field
                 v-model="form.reason"
+                oninput="this.value=this.value.replace(/[\d]/g,'');"
                 placeholder="请填写"
               ></mu-text-field>
             </mu-form-item>
@@ -415,6 +418,12 @@ export default {
   height: 100%;
   line-height: 2;
   font-size: inherit;
+}
+/deep/ .picker-item{
+  font-size: .64rem !important;
+}
+/deep/ .picker-item.picker-selected{
+  color: #3a72ed;
 }
 /deep/ .mu-input-help {
   display: none;

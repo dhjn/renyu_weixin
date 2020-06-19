@@ -9,6 +9,7 @@
             <mu-form-item prop="name">
               <mu-text-field
                 placeholder="请填写"
+                oninput="this.value=this.value.replace(/[\d]/g,'');"
                 v-model="form.name"
               ></mu-text-field>
             </mu-form-item>
@@ -64,6 +65,7 @@
             <mu-form-item prop="prove">
               <mu-text-field
                 placeholder="请填写"
+                oninput="this.value=this.value.replace(/[\d]/g,'');"
                 v-model="form.prove"
               ></mu-text-field>
             </mu-form-item>
@@ -400,6 +402,12 @@ export default {
   height: 100%;
   line-height: 2;
   font-size: inherit;
+}
+/deep/ .picker-item{
+  font-size: .64rem !important;
+}
+/deep/ .picker-item.picker-selected{
+  color: #3a72ed;
 }
 /deep/ .mu-input-help {
   display: none;

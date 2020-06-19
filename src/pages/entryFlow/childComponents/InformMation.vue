@@ -329,9 +329,8 @@
             <mu-form-item prop="mpct" :rules="mpct">
               <mu-text-field
                 placeholder="请填写"
+                oninput="this.value=this.value.replace(/[\d]/g,'');"
                 max-length="16"
-                oninput="value=value.replace(/[\d]/g,'') "
-                onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[\d]/g,''))"
                 v-model="form.mpct"
               ></mu-text-field>
             </mu-form-item>
@@ -361,6 +360,7 @@
           <span>
             <mu-form-item prop="mpphone" :rules="mpphone">
               <mu-text-field
+                type="number"
                 placeholder="请填写"
                 v-model="form.mpphone"
               ></mu-text-field>
@@ -558,7 +558,13 @@ export default {
       marital: [{ validate: val => !!val, message: "婚育状况不能为空" }],
       preempstat: [{ validate: val => !!val, message: "前期就业状态不能为空" }],
       keeplabor: [{ validate: val => !!val, message: "该项不能为空" }],
-      mpct: [{ validate: val => !!val, message: "紧急联系人不能为空" }],
+      mpct: [
+        { validate: val => !!val, message: "紧急联系人不能为空" },
+        // {
+        //   validate: val => this.val_Ch(this.form.mpct),
+        //   message: "请输入中文"
+        // }
+      ],
       mprelation: [
         { validate: val => !!val, message: "紧急联系人关系不能为空" }
       ],
@@ -685,6 +691,13 @@ export default {
       }
       return rtn;
     },
+    // val_Ch(str){
+    //   let rtn = false;
+    //   if (/^[\u4e00-\u9fa5]+$/gi.test(str)) {
+    //     rtn = true;
+    //   }
+    //   return rtn;
+    // },
     focus(type) {
       const t = this;
       let data = [];
@@ -1078,6 +1091,9 @@ export default {
 }
 /deep/ .mu-input-help {
   display: none;
+}
+/deep/ .picker-item.picker-selected{
+  color: #3a72ed;
 }
 /deep/ .mu-loading-wrap {
   position: fixed;
