@@ -9,7 +9,6 @@
             <mu-form-item prop="name">
               <mu-text-field
                 placeholder="请填写"
-                oninput="this.value=this.value.replace(/[\d]/g,'');"
                 v-model="form.name"
               ></mu-text-field>
             </mu-form-item>
@@ -65,7 +64,6 @@
             <mu-form-item prop="prove">
               <mu-text-field
                 placeholder="请填写"
-                oninput="this.value=this.value.replace(/[\d]/g,'');"
                 v-model="form.prove"
               ></mu-text-field>
             </mu-form-item>
@@ -135,6 +133,7 @@
       <mt-datetime-picker
         type="date"
         ref="picker"
+        @touchmove.native.prevent
         v-model="pickerValue"
         year-format="{value} 年"
         month-format="{value} 月"
@@ -380,6 +379,18 @@ export default {
         }
       });
     }
+  },
+  watch:{
+    "form.name": {
+      handler(val) {
+        this.form.name = val.replace(/[\d]/g,'');
+      }
+    },
+    "form.prove": {
+      handler(val) {
+        this.form.prove = val.replace(/[\d]/g,'');
+      }
+    },
   },
   computed: {
     formData() {

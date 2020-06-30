@@ -10,7 +10,6 @@
             <mu-form-item prop="familyName" :rules="familyName">
               <mu-text-field
                 placeholder="请填写"
-                oninput="this.value=this.value.replace(/[\d]/g,'');"
                 max-length="16"
                 v-model="form.familyName"
               ></mu-text-field>
@@ -55,7 +54,6 @@
             <mu-form-item prop="familyworkPlace">
               <mu-text-field
                 placeholder="请填写"
-                oninput="this.value=this.value.replace(/[\d]/g,'');"
                 max-length="16"
                 v-model="form.familyworkPlace"
               ></mu-text-field>
@@ -70,7 +68,6 @@
             <mu-form-item prop="familyJobTitle">
               <mu-text-field
                 placeholder="请填写"
-                oninput="this.value=this.value.replace(/[\d]/g,'');"
                 max-length="12"
                 v-model="form.familyJobTitle"
               ></mu-text-field>
@@ -262,6 +259,21 @@ export default {
         }
       }
     },
+    "form.familyName": {
+      handler(val) {
+        this.form.familyName = val.replace(/[\d]/g,'');
+      }
+    },
+    "form.familyworkPlace": {
+      handler(val) {
+        this.form.familyworkPlace = val.replace(/[\d]/g,'');
+      }
+    },
+    "form.familyJobTitle": {
+      handler(val) {
+        this.form.familyJobTitle = val.replace(/[\d]/g,'');
+      }
+    }
   },
   computed: {
     formData() {

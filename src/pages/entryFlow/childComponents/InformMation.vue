@@ -329,7 +329,6 @@
             <mu-form-item prop="mpct" :rules="mpct">
               <mu-text-field
                 placeholder="请填写"
-                oninput="this.value=this.value.replace(/[\d]/g,'');"
                 max-length="16"
                 v-model="form.mpct"
               ></mu-text-field>
@@ -435,6 +434,7 @@
       <mt-datetime-picker
         type="date"
         ref="picker"
+        @touchmove.native.prevent
         v-model="pickerValue"
         year-format="{value} 年"
         month-format="{value} 月"
@@ -1046,6 +1046,11 @@ export default {
         }
       }
     },
+    "form.mpct": {
+      handler(val) {
+        this.form.mpct = val.replace(/[\d]/g,'');
+      }
+    },
     pickerShow(val) {
       if (val) {
         this.closeTouch();
@@ -1092,7 +1097,7 @@ export default {
 /deep/ .mu-input-help {
   display: none;
 }
-/deep/ .picker-item.picker-selected{
+/deep/ .picker-item.picker-selected {
   color: #3a72ed;
 }
 /deep/ .mu-loading-wrap {

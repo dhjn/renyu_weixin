@@ -10,7 +10,6 @@
               <mu-text-field
                 placeholder="请填写"
                 max-length="16"
-                oninput="this.value=this.value.replace(/[\d]/g,'');"
                 v-model="form.relaName"
               ></mu-text-field>
             </mu-form-item>
@@ -40,7 +39,6 @@
               <mu-text-field
                 placeholder="请填写"
                 max-length="10"
-                oninput="this.value=this.value.replace(/[\d]/g,'');"
                 v-model="form.relaWorkp"
               ></mu-text-field>
             </mu-form-item>
@@ -55,7 +53,6 @@
               <mu-text-field
                 placeholder="请填写"
                 max-length="12"
-                oninput="this.value=this.value.replace(/[\d]/g,'');"
                 v-model="form.relaJobTitle"
               ></mu-text-field>
             </mu-form-item>
@@ -236,6 +233,23 @@ export default {
         }
       }
     }
+  },
+  watch:{
+    "form.relaName": {
+      handler(val) {
+        this.form.relaName = val.replace(/[\d]/g,'');
+      }
+    },
+    "form.relaWorkp": {
+      handler(val) {
+        this.form.relaWorkp = val.replace(/[\d]/g,'');
+      }
+    },
+    "form.relaJobTitle": {
+      handler(val) {
+        this.form.relaJobTitle = val.replace(/[\d]/g,'');
+      }
+    },
   },
   computed: {
     formData() {

@@ -43,7 +43,6 @@
               <mu-text-field
                 placeholder="请填写"
                 max-length="28"
-                oninput="this.value=this.value.replace(/[\d]/g,'');"
                 v-model="form.bankname"
               ></mu-text-field>
             </mu-form-item>
@@ -353,6 +352,11 @@ export default {
         if(val.length>20){
           this.form.bcard = val.substring(0,20)
         }
+      }
+    },
+    'form.bankname':{
+      handler(val){
+        this.form.bankname = val.replace(/[\d]/g,'');
       }
     },
   },

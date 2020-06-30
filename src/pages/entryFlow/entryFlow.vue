@@ -68,6 +68,7 @@ export default {
         .post("/api/loginservlet", qs.stringify(data))
         .then(res => {
           if (res.data.errcode === 0) {
+            localStorage.clear();
             localStorage.setItem("isLogin", true);
             localStorage.setItem("token", res.data.data.Token);
             localStorage.setItem("userId", res.data.data.userId);
@@ -105,7 +106,7 @@ export default {
         .then(res => {
           localStorage.setItem("formData", JSON.stringify(res.data.data));
           t.$store.commit("entryFlow/setFormData", res.data.data);
-          t.$store.commit("entryFlow/setInfoMsgShow",{});
+          t.$store.commit("entryFlow/setInfoMsgShow", {});
           t.$router.push({ path: "/entryFlowOffer" });
         })
         .catch(err => {
