@@ -16,7 +16,7 @@
           </li>
           <li class="arrows">
             <img src="../../../static/entryFlow/entry_7.png" alt="" />
-          </li>
+          </li> 
           <li>
             <img
               src="../../../static/entryFlow/entry_8.png"
