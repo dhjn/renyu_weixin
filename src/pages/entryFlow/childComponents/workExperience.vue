@@ -5,8 +5,9 @@
       <div class="message">
         <div class="messOne">
           <span>工作履历开始时间</span>
+          <span class="point">*</span>
           <span>
-            <mu-form-item prop="wstart">
+            <mu-form-item prop="wstart" :rules="wstart">
               <mu-text-field
                 v-model="form.wstart"
                 @focus="focus(1)"
@@ -20,8 +21,9 @@
       <div class="message">
         <div class="messOne">
           <span>工作履历结束时间</span>
+          <span class="point">*</span>
           <span>
-            <mu-form-item prop="wend">
+            <mu-form-item prop="wend" :rules="wend">
               <mu-text-field
                 class="inpt"
                 v-model="form.wend"
@@ -51,8 +53,9 @@
       <div class="message">
         <div class="messOne">
           <span>工作单位</span>
+          <span class="point">*</span>
           <span>
-            <mu-form-item prop="workplace">
+            <mu-form-item prop="workplace" :rules="workplace">
               <mu-text-field
                 v-model="form.workplace"
                 max-length="16"
@@ -290,6 +293,9 @@ export default {
         hinderwork: "0",
         parttime: "0"
       },
+      wstart: [{ validate: val => !!val, message: "该项必选" }],
+      wend: [{ validate: val => !!val, message: "该项必选" }],
+      workplace: [{ validate: val => !!val, message: "该项必选" }],
       issick: [{ validate: val => !!val, message: "该项必选" }],
       poc: [{ validate: val => !!val, message: "该项必选" }],
       pbehaivor: [{ validate: val => !!val, message: "该项必选" }],
