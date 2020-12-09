@@ -21,7 +21,7 @@
       <div class="message">
         <div class="messOne">
           <span>开户银行</span>
-          <!-- <span class="point">*</span> -->
+          <span class="point">*</span>
           <span>
             <mu-form-item prop="bank">
               <mu-text-field
@@ -108,7 +108,7 @@ export default {
         bcard: ""
       },
       bcardcity: [{ validate: val => !!val, message: "开户城市不能为空" }],
-      // bank: [{ validate: val => !!val, message: "开户银行不能为空" }],
+      bank: [{ validate: val => !!val, message: "开户银行不能为空" }],
       // bankname: [{ validate: val => !!val, message: "开户银行全称不能为空" }],
       bcard: [{ validate: val => !!val, message: "银行卡号不能为空" }],
       scrollType: "",
