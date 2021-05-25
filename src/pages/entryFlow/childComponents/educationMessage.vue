@@ -167,7 +167,7 @@ export default {
   data() {
     return {
       typeNum: "",
-      startDate: new Date("2000-01-01"),
+      startDate: new Date("1980-01-01"),
       endDate: new Date(),
       pickerValue: new Date(),
       educationOptions: [],
