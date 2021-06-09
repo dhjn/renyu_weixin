@@ -1,7 +1,8 @@
 const pubsource = {
 	// 以下为开发环境变量配置
   // pub_getlink: 'http://192.168.21.59:8080/HRSSC_GOHR',
-  pub_getlink: 'http://192.168.21.141:8080/HRSSC_GOHR',
+  // pub_getlink: 'http://192.168.21.141:8080/HRSSC_GOHR',
+  pub_getlink: 'http://192.168.21.163:8080/HRSSC_GOHR',
   // pub_getlink :'http://darren.hrocloud.com:809a9/HRSSC_GOHR',
 	clientId: '1000',
 	clientPass: '6cc1c430aed64d3bb8516011195a5b56',

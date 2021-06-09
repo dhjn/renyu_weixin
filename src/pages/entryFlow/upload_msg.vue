@@ -148,15 +148,15 @@ export default {
           id: 6152
         },
         {
-          title: "健康证正面照片",
+          title: "健康证照片",
           iconImg: require("../../../static/entryFlow/entry_18.png"),
-          rename: "健康证照片正面",
+          rename: "健康证照片",
           id: 6149
         },
         {
-          title: "健康证反面照片",
+          title: "健康证附件照片",
           iconImg: require("../../../static/entryFlow/entry_18.png"),
-          rename: "健康证照片反面",
+          rename: "健康证附件照片",
           id: 6151
         },
         // {
